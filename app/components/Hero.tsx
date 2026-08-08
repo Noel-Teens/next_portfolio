@@ -102,21 +102,15 @@ export default function Hero() {
           </span>
         </motion.div>
 
-        {/* On mobile the headline is a clean centred stack that fits the
-            viewport; at lg+ it becomes the split composition — "IN THE" and
-            "DEEP" pinned to the edges of a centred band (never wider than the
-            shell, so nothing clips) with the figure occupying the middle.
-            No overflow-hidden here: each word self-clips via its own clipPath. */}
-        <h1 className="display text-frost drop-shadow-[0_2px_24px_rgba(4,20,28,0.7)]">
-          {/* Two rows, each pushing its words to the outer edges around a fixed
-              CENTRE SPACER that reserves the character's column. The rows are
-              tuned INDEPENDENTLY: row 1 (short words PRESS/START) can be larger
-              with a narrower centre gap; row 2 (long words, esp. "TO BUILD")
-              uses a smaller size and a WIDER centre gap so the words clear the
-              figure. Words are never width-capped (that clipped them) and never
-              wrap — the spacer alone controls the gap. */}
+        {/* Desktop (lg+) is the committed, edge-split composition — words pushed
+            to the outer edges of an 86rem band around a fixed CENTRE SPACER that
+            reserves the character's column. Those desktop classes are LEFT EXACTLY
+            as shipped. Mobile (<lg) is layered on via `max-lg:` overrides only:
+            smaller type, centred, gapped — so the words never crowd the screen
+            edges. No `lg:` desktop value is touched. */}
+        <h1 className="display text-center text-frost drop-shadow-[0_2px_24px_rgba(4,20,28,0.7)] lg:text-left">
           {/* Row 1 — short words, big, small centre gap */}
-          <span className="mx-auto flex w-full max-w-[min(100%,86rem)] items-baseline justify-between text-[clamp(2.75rem,13vw,12.5rem)] leading-[0.86] tracking-[-0.02em]">
+          <span className="mx-auto flex w-full max-w-[min(100%,86rem)] items-baseline justify-between text-[clamp(2.75rem,13vw,12.5rem)] leading-[0.86] tracking-[-0.02em] max-lg:justify-center max-lg:gap-[0.3em] max-lg:text-[clamp(2.25rem,10.5vw,4rem)] max-lg:leading-[0.9]">
             <motion.span
               className="block whitespace-nowrap"
               initial={{ clipPath: "inset(0 0 100% 0)", y: "0.3em" }}
@@ -125,8 +119,8 @@ export default function Hero() {
             >
               PRESS
             </motion.span>
-            {/* centre spacer for the figure */}
-            <span aria-hidden className="w-[15%] flex-none" />
+            {/* centre spacer for the figure — desktop only */}
+            <span aria-hidden className="w-[15%] flex-none max-lg:hidden" />
             <motion.span
               className="block whitespace-nowrap"
               initial={{ clipPath: "inset(0 0 100% 0)", y: "0.3em" }}
@@ -138,7 +132,7 @@ export default function Hero() {
           </span>
 
           {/* Row 2 — long words, smaller, WIDER centre gap */}
-          <span className="mx-auto mt-1 flex w-full max-w-[min(100%,86rem)] items-baseline justify-between text-[clamp(2.1rem,9.5vw,8.75rem)] leading-[0.86] tracking-[-0.02em] sm:mt-2">
+          <span className="mx-auto mt-1 flex w-full max-w-[min(100%,86rem)] items-baseline justify-between text-[clamp(2.1rem,9.5vw,8.75rem)] leading-[0.86] tracking-[-0.02em] sm:mt-2 max-lg:justify-center max-lg:gap-[0.3em] max-lg:text-[clamp(1.6rem,7.5vw,3rem)] max-lg:leading-[0.9]">
             <motion.span
               className="block whitespace-nowrap"
               initial={{ clipPath: "inset(0 0 100% 0)", y: "0.3em" }}
@@ -147,8 +141,8 @@ export default function Hero() {
             >
               TO&nbsp;BUILD
             </motion.span>
-            {/* wider centre spacer — long words need more clearance */}
-            <span aria-hidden className="w-[20%] flex-none" />
+            {/* wider centre spacer — long words need more clearance; desktop only */}
+            <span aria-hidden className="w-[20%] flex-none max-lg:hidden" />
             <motion.span
               className="block whitespace-nowrap"
               initial={{ clipPath: "inset(0 0 100% 0)", y: "0.3em" }}
