@@ -1,26 +1,388 @@
 @import "tailwindcss";
 
+/* ---------------------------------------------------------------------------
+   Ocean identity — a single, permanent "deep-sea descent" theme.
+   No dark/light switch: the page IS dark water, top to bottom.
+   Palette (client-provided):
+     Deep Sea Teal   #0C3846  primary surfaces + headings
+     Arctic Ocean    #2A7387  secondary section background
+     Cerulean Ripple #5EB0C8  accent: links, tags, hover, glow
+     Icy Glaze       #9FD3E3  muted text on dark, hairline borders
+     Frost White     #E4F4F8  light surfaces + text on dark
+--------------------------------------------------------------------------- */
+
+@theme {
+  --font-display: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-fira-code), "JetBrains Mono", monospace;
+
+  --color-abyss: #0a2c38; /* one step below Deep Sea Teal, for depth */
+  --color-deep: #0c3846; /* Deep Sea Teal */
+  --color-arctic: #2a7387; /* Arctic Ocean Blue */
+  --color-ripple: #5eb0c8; /* Cerulean Ripple — accent */
+  --color-glaze: #9fd3e3; /* Icy Glaze */
+  --color-frost: #e4f4f8; /* Frost White */
+
+  --color-primary: #5eb0c8; /* accent alias used across components */
+  --color-background: #0a2c38;
+  --color-foreground: #e4f4f8;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: dark;
+  --surface: rgba(228, 244, 248, 0.05);
+  --surface-line: rgba(159, 211, 227, 0.18);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html {
+  scroll-behavior: smooth;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Anchored sections clear the fixed navbar when jumped to, and never sit under
+   it. Keeps section mastheads (with their oversized ghost words) off the nav. */
+section[id] {
+  scroll-margin-top: 6rem;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--color-abyss);
+  color: var(--color-frost);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  /* No grid. A slow vertical depth gradient: surface light up top,
+     abyssal dark toward the fold — reinforced per-section below. */
+  background-image: linear-gradient(
+    180deg,
+    #12475a 0%,
+    #0c3846 22%,
+    #0a2c38 55%,
+    #071f28 100%
+  );
+  background-attachment: fixed;
+}
+
+/* --- Reusable surface treatments ------------------------------------------ */
+
+@layer utilities {
+  /* Glassy card lit from within by cool water light. */
+  .glass {
+    background: linear-gradient(
+      160deg,
+      rgba(228, 244, 248, 0.09),
+      rgba(228, 244, 248, 0.02)
+    );
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--surface-line);
+    box-shadow: 0 8px 40px rgba(4, 20, 28, 0.4);
+  }
+
+  .text-gradient {
+    background-image: linear-gradient(120deg, #9fd3e3, #5eb0c8 55%, #2a7387);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Eyebrow label — mono, wide-tracked, the page's structural voice. */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--color-ripple);
+  }
+
+  /* Oversized display type — the magazine-reference voice. Negative tracking,
+     tight leading, optical weight. Used for hero + section masthead only. */
+  .display {
+    font-family: var(--font-display);
+    font-weight: 700; /* Space Grotesk tops out at 700 — avoid faux-bold */
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+  }
+
+  /* LEDE — an enlarged, light-weight display line used to open a block of copy.
+     The magazine "standfirst" voice: big enough to be noticed and hold its own
+     over busy art, but airy (weight 300) so it stays elegant rather than shouty.
+     A faint cyan text-shadow lifts it off the character illustration behind. */
+  .lede {
+    font-family: var(--font-display);
+    font-weight: 500;
+    line-height: 1.14;
+    letter-spacing: -0.015em;
+    color: var(--color-frost);
+    text-shadow: 0 2px 22px rgba(4, 20, 28, 0.85),
+      0 0 34px rgba(94, 176, 200, 0.22);
+  }
+  .lede em {
+    font-style: normal;
+    font-weight: 700;
+    color: #aef0ff;
+  }
+
+  /* A hairline gradient rule that fades like distance into water. */
+  .rule-fade {
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--color-ripple) 20%,
+      var(--color-ripple) 80%,
+      transparent
+    );
+    opacity: 0.4;
+  }
+
+  /* Text stroke treatment — an outlined word behind a filled one (masthead). */
+  .text-outline {
+    -webkit-text-stroke: 1.5px rgba(159, 211, 227, 0.5);
+    color: transparent;
+  }
+
+  /* Terminal-style data chip. */
+  .chip {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.02em;
+    color: var(--color-glaze);
+    border: 1px solid rgba(159, 211, 227, 0.22);
+    background: linear-gradient(
+      90deg,
+      rgba(94, 176, 200, 0.06),
+      rgba(228, 244, 248, 0.03)
+    );
+  }
+
+  /* GLOW HORIZON — the bright cyan light-bloom along a line (reference hero).
+     Contrast through luminosity, which is the whole fix: bright cyan against
+     deep teal rather than flat teal-on-teal. */
+  .glow-horizon {
+    position: relative;
+  }
+  .glow-horizon::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    height: 2px;
+    width: min(70rem, 90%);
+    transform: translateX(-50%);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      #7fe9ff 30%,
+      #e4f4f8 50%,
+      #7fe9ff 70%,
+      transparent
+    );
+    box-shadow: 0 0 40px 12px rgba(127, 233, 255, 0.55),
+      0 0 120px 40px rgba(94, 176, 200, 0.35);
+  }
+
+  /* RIM-LIT card — the glowing edge-light around the focused character card.
+     Applied to the selected coverflow panel. */
+  .rim-light {
+    box-shadow: 0 0 0 1px rgba(127, 233, 255, 0.7),
+      0 0 30px rgba(127, 233, 255, 0.5), 0 0 80px rgba(94, 176, 200, 0.35),
+      0 30px 60px rgba(4, 20, 28, 0.6);
+  }
+
+  /* Body copy that must stay legible over busy artwork: brighter than glaze,
+     a touch heavier, with a soft dark halo so edges hold against the image. */
+  .copy-legible {
+    color: rgba(228, 244, 248, 0.9);
+    font-weight: 450;
+    text-shadow: 0 1px 16px rgba(4, 20, 28, 0.75);
+  }
+
+  /* Small bright cyan text glow for numbers/labels that should pop. */
+  .lit {
+    color: #aef0ff;
+    text-shadow: 0 0 18px rgba(127, 233, 255, 0.6);
+  }
+
+  /* SHELL — full-bleed content frame. The site runs edge to edge; this only
+     keeps a small, viewport-scaled side gutter so text never kisses the screen
+     edge. Much wider than the old max-w-7xl boxed column. */
+  .shell {
+    width: 100%;
+    max-width: 100%;
+    margin-inline: 0;
+    padding-inline: clamp(1.25rem, 5vw, 6rem);
+  }
+
+  /* Marquee ribbon — a repeating kinetic band used as a section divider. */
+  .marquee {
+    overflow: hidden;
+    white-space: nowrap;
+    border-block: 1px solid rgba(159, 211, 227, 0.15);
+    background: linear-gradient(
+      90deg,
+      rgba(94, 176, 200, 0.08),
+      rgba(10, 44, 56, 0)
+    );
+  }
+  .marquee__track {
+    display: inline-flex;
+    gap: 3rem;
+    padding-block: 0.75rem;
+    animation: marquee-scroll 28s linear infinite;
+  }
+}
+
+/* --- Kinetic type reveal (page-load masthead) ----------------------------- */
+@keyframes clip-up {
+  from {
+    clip-path: inset(0 0 100% 0);
+    transform: translateY(0.4em);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    transform: translateY(0);
+  }
+}
+
+/* --- Sonar sweep (hero porthole signature) -------------------------------- */
+@keyframes sonar-sweep {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes sonar-ping {
+  0% {
+    transform: scale(0.3);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+/* --- HUD readout flicker (dive computer) ---------------------------------- */
+@keyframes hud-flicker {
+  0%,
+  97%,
+  100% {
+    opacity: 1;
+  }
+  98% {
+    opacity: 0.55;
+  }
+}
+
+/* --- Marquee ribbon scroll ------------------------------------------------ */
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* --- Drifting bubble field (bubbles.png): two stacked tiles looping up and
+   slightly across, for a diagonal rise. Vertical step is exactly one tile
+   height (-50% of the double-tall track) so the seam is invisible; the small
+   horizontal component is absorbed by the over-wide track in Bubbles.tsx. --- */
+@keyframes bubbles-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(6%, -50%, 0);
+  }
+}
+
+
+/* --- Ambient motion: caustics, light rays, bubbles ------------------------ */
+
+/* Caustic ripple — the shifting net of light on the seafloor. Rendered as a
+   full-viewport fixed layer behind content (see AmbientOcean component). */
+@keyframes caustic-drift {
+  0% {
+    transform: translate3d(-4%, -2%, 0) scale(1.1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate3d(3%, 2%, 0) scale(1.25);
+    opacity: 0.75;
+  }
+  100% {
+    transform: translate3d(-4%, -2%, 0) scale(1.1);
+    opacity: 0.5;
+  }
+}
+
+/* God-rays slowly sweeping from the surface. */
+@keyframes ray-sway {
+  0%,
+  100% {
+    transform: rotate(-6deg) translateX(-2%);
+    opacity: 0.35;
+  }
+  50% {
+    transform: rotate(4deg) translateX(2%);
+    opacity: 0.6;
+  }
+}
+
+/* Gentle vertical float for hovering cards / accents. */
+@keyframes drift {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-drift {
+  animation: drift 6s ease-in-out infinite;
+}
+
+/* --- Custom scrollbar (cool water) ---------------------------------------- */
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(94, 176, 200, 0.35);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(94, 176, 200, 0.6);
+}
+
+/* --- Selection + focus ---------------------------------------------------- */
+
+::selection {
+  background: rgba(94, 176, 200, 0.35);
+  color: var(--color-frost);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-ripple);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* --- Reduced motion: honor the diver who wants stillness ------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -1,0 +1,56 @@
+import { Linkedin, Instagram, Github } from "lucide-react";
+
+const socials = [
+  {
+    Icon: Linkedin,
+    href: "https://www.linkedin.com/in/teenie-rod-joshua-bb0bbb327/",
+    label: "LinkedIn",
+  },
+  {
+    Icon: Instagram,
+    href: "https://www.instagram.com/noel_teens/",
+    label: "Instagram",
+  },
+  { Icon: Github, href: "https://github.com/Noel-Teens", label: "GitHub" },
+];
+
+export default function Footer() {
+  const year = new Date().getFullYear();
+
+  return (
+    <footer className="border-t border-glaze/10 bg-[#071f28] py-12">
+      <div className="shell flex flex-col items-center justify-between gap-8 md:flex-row">
+        <div className="text-center md:text-left">
+          <h3 className="font-display text-lg font-bold text-frost">
+            Teenie Rod Joshua B
+          </h3>
+          <p className="mt-1 text-sm text-glaze">
+            Full-stack developer. Back at the surface — thanks for the dive.
+          </p>
+        </div>
+
+        <div className="flex gap-3">
+          {socials.map(({ Icon, href, label }) => (
+            <a
+              key={label}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-xl border border-glaze/15 bg-frost/5 p-3 text-glaze transition-all hover:border-ripple/40 hover:text-ripple"
+              aria-label={label}
+            >
+              <Icon size={20} />
+            </a>
+          ))}
+        </div>
+
+        <div className="text-center text-sm text-glaze md:text-right">
+          <p className="font-semibold text-frost">
+            &copy; {year} Teenie Rod Joshua B.
+          </p>
+          <p className="mt-1">Built with Next.js &amp; Tailwind CSS</p>
+        </div>
+      </div>
+    </footer>
+  );
+}
