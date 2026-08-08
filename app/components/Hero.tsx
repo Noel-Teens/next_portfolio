@@ -64,7 +64,7 @@ export default function Hero() {
         >
           <Image
             src="/character.png"
-            alt="Illustration of the developer as a deep-sea diver"
+            alt="Illustration of the developer as a game character"
             width={1024}
             height={1536}
             preload
@@ -98,7 +98,7 @@ export default function Hero() {
         >
           <span className="rule-fade w-10 flex-none" />
           <span className="eyebrow flex items-center gap-2 text-[0.66rem]">
-            <Radar size={13} /> begin descent · 12°N 8°W
+            <Radar size={13} /> player online · rank S
           </span>
         </motion.div>
 
@@ -107,36 +107,55 @@ export default function Hero() {
             "DEEP" pinned to the edges of a centred band (never wider than the
             shell, so nothing clips) with the figure occupying the middle.
             No overflow-hidden here: each word self-clips via its own clipPath. */}
-        <h1 className="display text-center text-frost drop-shadow-[0_2px_24px_rgba(4,20,28,0.7)] lg:text-left">
-          {/* Row 1 */}
-          <span className="block">
+        <h1 className="display text-frost drop-shadow-[0_2px_24px_rgba(4,20,28,0.7)]">
+          {/* Two rows, each pushing its words to the outer edges around a fixed
+              CENTRE SPACER that reserves the character's column. The rows are
+              tuned INDEPENDENTLY: row 1 (short words PRESS/START) can be larger
+              with a narrower centre gap; row 2 (long words, esp. "TO BUILD")
+              uses a smaller size and a WIDER centre gap so the words clear the
+              figure. Words are never width-capped (that clipped them) and never
+              wrap — the spacer alone controls the gap. */}
+          {/* Row 1 — short words, big, small centre gap */}
+          <span className="mx-auto flex w-full max-w-[min(100%,86rem)] items-baseline justify-between text-[clamp(2.75rem,13vw,12.5rem)] leading-[0.86] tracking-[-0.02em]">
             <motion.span
-              className="block text-[clamp(2.75rem,15vw,14rem)] leading-[0.86] tracking-[-0.02em] lg:text-center"
+              className="block whitespace-nowrap"
               initial={{ clipPath: "inset(0 0 100% 0)", y: "0.3em" }}
               animate={{ clipPath: "inset(0 0 0% 0)", y: 0 }}
               transition={{ duration: 0.9, ease, delay: 0.1 }}
             >
-              BUILDING
+              PRESS
+            </motion.span>
+            {/* centre spacer for the figure */}
+            <span aria-hidden className="w-[15%] flex-none" />
+            <motion.span
+              className="block whitespace-nowrap"
+              initial={{ clipPath: "inset(0 0 100% 0)", y: "0.3em" }}
+              animate={{ clipPath: "inset(0 0 0% 0)", y: 0 }}
+              transition={{ duration: 0.9, ease, delay: 0.18 }}
+            >
+              START
             </motion.span>
           </span>
 
-          {/* Row 2 */}
-          <span className="mt-1 flex flex-col items-center sm:mt-2 lg:mx-auto lg:w-full lg:max-w-[min(100%,88rem)] lg:flex-row lg:items-baseline lg:justify-between">
+          {/* Row 2 — long words, smaller, WIDER centre gap */}
+          <span className="mx-auto mt-1 flex w-full max-w-[min(100%,86rem)] items-baseline justify-between text-[clamp(2.1rem,9.5vw,8.75rem)] leading-[0.86] tracking-[-0.02em] sm:mt-2">
             <motion.span
-              className="block text-[clamp(2.5rem,12vw,9.5rem)] leading-[0.86] tracking-[-0.02em]"
+              className="block whitespace-nowrap"
               initial={{ clipPath: "inset(0 0 100% 0)", y: "0.3em" }}
               animate={{ clipPath: "inset(0 0 0% 0)", y: 0 }}
               transition={{ duration: 0.9, ease, delay: 0.24 }}
             >
-              IN&nbsp;THE
+              TO&nbsp;BUILD
             </motion.span>
+            {/* wider centre spacer — long words need more clearance */}
+            <span aria-hidden className="w-[20%] flex-none" />
             <motion.span
-              className="block text-[clamp(2.5rem,12vw,9.5rem)] leading-[0.86] tracking-[-0.02em]"
+              className="block whitespace-nowrap"
               initial={{ clipPath: "inset(0 0 100% 0)", y: "0.3em" }}
               animate={{ clipPath: "inset(0 0 0% 0)", y: 0 }}
               transition={{ duration: 0.9, ease, delay: 0.34 }}
             >
-              <span className="text-gradient">DEEP</span>
+              <span className="text-gradient">WORLDS</span>
             </motion.span>
           </span>
         </h1>
@@ -162,10 +181,9 @@ export default function Hero() {
             thoughtful software from the ground up.
           </p>
           <p className="copy-legible mx-auto mt-5 max-w-md text-base leading-relaxed lg:mx-0">
-            I enjoy turning ideas into useful digital experiences, working across
-            interfaces, systems, and everything in between. I care about
-            understanding the problem first, then building software that is
-            clear, reliable, and genuinely useful.
+            I turn ideas into playable software — working across interfaces,
+            systems, and everything in between. I scout the problem first, then
+            build things that are clear, reliable, and actually fun to use.
           </p>
         </motion.div>
 
@@ -186,10 +204,10 @@ export default function Hero() {
             something just to ship.
           </p>
           <p className="copy-legible mx-auto mt-5 max-w-md text-base leading-relaxed lg:ml-auto lg:mr-0">
-            I focus on understanding the details, keeping things simple where
-            they can be, and going deeper where they need to be. Every project is
-            an opportunity to learn, solve a real problem, and make something
-            better than it was before.
+            I read the level before rushing it — simplifying the easy stretches
+            and grinding the hard bosses. Every project is another run: a chance
+            to level up, clear a real problem, and leave the map better than I
+            found it.
           </p>
         </motion.div>
       </div>

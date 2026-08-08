@@ -1,14 +1,18 @@
 @import "tailwindcss";
 
 /* ---------------------------------------------------------------------------
-   Ocean identity — a single, permanent "deep-sea descent" theme.
-   No dark/light switch: the page IS dark water, top to bottom.
-   Palette (client-provided):
-     Deep Sea Teal   #0C3846  primary surfaces + headings
-     Arctic Ocean    #2A7387  secondary section background
-     Cerulean Ripple #5EB0C8  accent: links, tags, hover, glow
-     Icy Glaze       #9FD3E3  muted text on dark, hairline borders
-     Frost White     #E4F4F8  light surfaces + text on dark
+   Player-console identity — a single, permanent dark sci-fi HUD theme.
+   No dark/light switch: the page IS a game interface, top to bottom.
+   Palette (teal/cyan HUD family — kept from the prior identity, but the text
+   FLOOR was raised: the old muted #9FD3E3 body ink blended into the teal, so
+   body copy now uses a brighter near-white "ink" and cards are SOLID, not 5%
+   glass. Readability is the first requirement.):
+     Console Teal    #0C3846  primary surfaces
+     Steel Blue      #2A7387  secondary background
+     Neon Cyan       #7FE9FF  primary accent / glow
+     Ripple Cyan     #5EB0C8  secondary accent
+     Ink             #D3E7EF  DEFAULT body text (bright, high-contrast)
+     Frost White     #E4F4F8  headings / brightest text
 --------------------------------------------------------------------------- */
 
 @theme {
@@ -16,12 +20,14 @@
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-fira-code), "JetBrains Mono", monospace;
 
-  --color-abyss: #0a2c38; /* one step below Deep Sea Teal, for depth */
-  --color-deep: #0c3846; /* Deep Sea Teal */
-  --color-arctic: #2a7387; /* Arctic Ocean Blue */
-  --color-ripple: #5eb0c8; /* Cerulean Ripple — accent */
-  --color-glaze: #9fd3e3; /* Icy Glaze */
-  --color-frost: #e4f4f8; /* Frost White */
+  --color-abyss: #0a2c38; /* base background */
+  --color-deep: #0c3846; /* Console Teal */
+  --color-arctic: #2a7387; /* Steel Blue */
+  --color-ripple: #5eb0c8; /* Ripple Cyan — secondary accent */
+  --color-neon: #7fe9ff; /* Neon Cyan — primary accent / glow */
+  --color-glaze: #9fd3e3; /* legacy muted — reserved for borders/decoration */
+  --color-ink: #d3e7ef; /* DEFAULT body text — bright, readable on teal */
+  --color-frost: #e4f4f8; /* Frost White — headings */
 
   --color-primary: #5eb0c8; /* accent alias used across components */
   --color-background: #0a2c38;
@@ -30,8 +36,10 @@
 
 :root {
   color-scheme: dark;
-  --surface: rgba(228, 244, 248, 0.05);
-  --surface-line: rgba(159, 211, 227, 0.18);
+  /* Card surface is now a SOLID panel, not translucent glass over the busy
+     background — the old rgba(...,0.05) fill was the reason cards vanished. */
+  --surface: #0e3040;
+  --surface-line: rgba(127, 233, 255, 0.28);
 }
 
 html {
@@ -48,7 +56,7 @@ body {
   margin: 0;
   min-height: 100vh;
   background-color: var(--color-abyss);
-  color: var(--color-frost);
+  color: var(--color-ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   /* No grid. A slow vertical depth gradient: surface light up top,
@@ -66,33 +74,37 @@ body {
 /* --- Reusable surface treatments ------------------------------------------ */
 
 @layer utilities {
-  /* Glassy card lit from within by cool water light. */
+  /* Console PANEL — a SOLID, clearly-bordered card. Previously this was a 5%
+     translucent "glass" fill that disappeared against the busy background; the
+     panel is now opaque with a visible cyan edge and a subtle top sheen so it
+     reads as a physical HUD element. This is the core "cards barely visible" fix. */
   .glass {
     background: linear-gradient(
       160deg,
-      rgba(228, 244, 248, 0.09),
-      rgba(228, 244, 248, 0.02)
+      #123d4e 0%,
+      #0d3242 55%,
+      #0b2b38 100%
     );
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
     border: 1px solid var(--surface-line);
-    box-shadow: 0 8px 40px rgba(4, 20, 28, 0.4);
+    box-shadow: inset 0 1px 0 rgba(127, 233, 255, 0.14),
+      0 10px 40px rgba(4, 20, 28, 0.55);
   }
 
   .text-gradient {
-    background-image: linear-gradient(120deg, #9fd3e3, #5eb0c8 55%, #2a7387);
+    background-image: linear-gradient(120deg, #e4f4f8, #7fe9ff 55%, #5eb0c8);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
 
-  /* Eyebrow label — mono, wide-tracked, the page's structural voice. */
+  /* Eyebrow label — mono, wide-tracked, the page's structural voice. Brightened
+     to neon cyan so labels never fade into the background. */
   .eyebrow {
     font-family: var(--font-mono);
     font-size: 0.72rem;
     letter-spacing: 0.28em;
     text-transform: uppercase;
-    color: var(--color-ripple);
+    color: var(--color-neon);
   }
 
   /* Oversized display type — the magazine-reference voice. Negative tracking,
@@ -142,18 +154,15 @@ body {
     color: transparent;
   }
 
-  /* Terminal-style data chip. */
+  /* Terminal-style data chip — an "equipped item" pill. Brighter text + a
+     visible fill so chips read as solid tags, not ghost outlines. */
   .chip {
     font-family: var(--font-mono);
     font-size: 0.68rem;
     letter-spacing: 0.02em;
-    color: var(--color-glaze);
-    border: 1px solid rgba(159, 211, 227, 0.22);
-    background: linear-gradient(
-      90deg,
-      rgba(94, 176, 200, 0.06),
-      rgba(228, 244, 248, 0.03)
-    );
+    color: var(--color-frost);
+    border: 1px solid rgba(127, 233, 255, 0.32);
+    background: rgba(127, 233, 255, 0.1);
   }
 
   /* GLOW HORIZON — the bright cyan light-bloom along a line (reference hero).
@@ -193,9 +202,9 @@ body {
   /* Body copy that must stay legible over busy artwork: brighter than glaze,
      a touch heavier, with a soft dark halo so edges hold against the image. */
   .copy-legible {
-    color: rgba(228, 244, 248, 0.9);
+    color: var(--color-frost);
     font-weight: 450;
-    text-shadow: 0 1px 16px rgba(4, 20, 28, 0.75);
+    text-shadow: 0 1px 16px rgba(4, 20, 28, 0.9), 0 0 2px rgba(4, 20, 28, 0.8);
   }
 
   /* Small bright cyan text glow for numbers/labels that should pop. */
@@ -262,18 +271,6 @@ body {
   }
 }
 
-/* --- HUD readout flicker (dive computer) ---------------------------------- */
-@keyframes hud-flicker {
-  0%,
-  97%,
-  100% {
-    opacity: 1;
-  }
-  98% {
-    opacity: 0.55;
-  }
-}
-
 /* --- Marquee ribbon scroll ------------------------------------------------ */
 @keyframes marquee-scroll {
   from {
@@ -284,21 +281,22 @@ body {
   }
 }
 
-/* --- Drifting bubble field (bubbles.png): two stacked tiles looping up and
-   slightly across, for a diagonal rise. Vertical step is exactly one tile
-   height (-50% of the double-tall track) so the seam is invisible; the small
-   horizontal component is absorbed by the over-wide track in Bubbles.tsx. --- */
-@keyframes bubbles-drift {
-  from {
+/* --- Snowfall: small particles falling the full viewport with a gentle sway.
+   Travels 112vh so flakes clear the screen top-to-bottom; the horizontal sway
+   uses each flake's own --drift amplitude, set inline per particle. ---------- */
+@keyframes snow-fall {
+  0% {
     transform: translate3d(0, 0, 0);
   }
-  to {
-    transform: translate3d(6%, -50%, 0);
+  50% {
+    transform: translate3d(var(--drift, 20px), 56vh, 0);
+  }
+  100% {
+    transform: translate3d(0, 112vh, 0);
   }
 }
 
-
-/* --- Ambient motion: caustics, light rays, bubbles ------------------------ */
+/* --- Ambient motion: caustics, light rays --------------------------------- */
 
 /* Caustic ripple — the shifting net of light on the seafloor. Rendered as a
    full-viewport fixed layer behind content (see AmbientOcean component). */

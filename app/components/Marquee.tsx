@@ -9,7 +9,7 @@ export default function Marquee({ text }: { text: string }) {
         {items.map((_, i) => (
           <span
             key={i}
-            className="font-mono text-xs uppercase tracking-[0.35em] text-glaze/50"
+            className="font-mono text-xs uppercase tracking-[0.35em] text-ink/70"
           >
             {text}
             <span className="mx-6 text-[#7fe9ff]">✦</span>

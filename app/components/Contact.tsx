@@ -16,7 +16,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="flex w-full items-center justify-center gap-3 rounded-xl bg-ripple py-4 text-lg font-semibold text-abyss shadow-xl shadow-ripple/25 transition-all hover:bg-glaze hover:shadow-[0_0_36px_rgba(94,176,200,0.5)] disabled:cursor-not-allowed disabled:opacity-60"
+      className="flex w-full items-center justify-center gap-3 rounded-xl bg-neon py-4 text-lg font-semibold text-abyss shadow-xl shadow-neon/25 transition-all hover:bg-frost hover:shadow-[0_0_36px_rgba(127,233,255,0.6)] disabled:cursor-not-allowed disabled:opacity-60"
     >
       {pending ? "Sending…" : "Send message"} <Send className="h-5 w-5" />
     </button>
@@ -24,7 +24,7 @@ function SubmitButton() {
 }
 
 const fieldClass =
-  "w-full rounded-xl border border-glaze/20 bg-abyss/50 px-5 py-3.5 font-medium text-frost placeholder:text-glaze/40 outline-none transition-all focus:border-ripple focus:bg-abyss/80 focus:ring-2 focus:ring-ripple/30";
+  "w-full rounded-xl border border-neon/25 bg-abyss/70 px-5 py-3.5 font-medium text-frost placeholder:text-ink/50 outline-none transition-all focus:border-neon focus:bg-abyss focus:ring-2 focus:ring-neon/30";
 
 export default function Contact() {
   const [state, formAction] = useActionState(submitContact, initialState);
@@ -58,28 +58,17 @@ export default function Contact() {
               aria-hidden
               className="display text-outline pointer-events-none absolute -top-10 -left-1 select-none text-[clamp(3rem,11vw,8rem)] leading-none opacity-50"
             >
-              SEABED
+              CONTACT
             </span>
-            <span className="eyebrow relative">— 1200m · the seabed</span>
+            <span className="eyebrow relative">— final boss · contact</span>
             <h2 className="display relative mt-3 text-4xl leading-tight text-frost md:text-5xl">
-              You&apos;ve reached the bottom. Let&apos;s talk.
+              You&apos;ve reached the final screen. Let&apos;s talk.
             </h2>
           </div>
-          <p className="mt-6 max-w-md text-lg leading-relaxed text-glaze">
+          <p className="mt-6 max-w-md text-lg leading-relaxed text-ink">
             Have a problem worth solving, a role to fill, or just want to compare
             notes? Send a message — I read every one and reply quickly.
           </p>
-
-          <div className="mt-10 space-y-3 text-sm text-glaze">
-            <p>
-              <span className="eyebrow mr-3 text-[0.6rem]">reply time</span>
-              usually within a day
-            </p>
-            <p>
-              <span className="eyebrow mr-3 text-[0.6rem]">based in</span>
-              open to remote, worldwide
-            </p>
-          </div>
         </motion.div>
 
         {/* Form */}
@@ -125,7 +114,7 @@ export default function Contact() {
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <div className="space-y-2">
                 <label htmlFor="company" className="eyebrow block text-[0.62rem]">
-                  Company <span className="text-glaze/40">(optional)</span>
+                  Company <span className="text-ink/60">(optional)</span>
                 </label>
                 <input
                   id="company"
@@ -169,7 +158,7 @@ export default function Contact() {
               <p
                 role="status"
                 className={`text-sm font-semibold ${
-                  state.status === "success" ? "text-glaze" : "text-red-300"
+                  state.status === "success" ? "text-neon" : "text-red-300"
                 }`}
               >
                 {state.message}

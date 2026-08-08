@@ -13,22 +13,22 @@ const ease = [0.22, 1, 0.36, 1] as const;
 const stages = [
   {
     icon: Compass,
-    title: "Chart the brief",
+    title: "Scout the objective",
     body: "Understand the problem before the pixels. Constraints, users, and the one outcome that matters.",
   },
   {
     icon: Layers,
-    title: "Model the depths",
+    title: "Build the foundation",
     body: "Data shapes first. A clean schema and clear boundaries make every layer above it simpler.",
   },
   {
     icon: Radar,
-    title: "Build & pressure-test",
+    title: "Ship & stress-test",
     body: "Ship in slices, watch the edge cases, and let real usage — not assumptions — steer the next move.",
   },
   {
     icon: Anchor,
-    title: "Launch & maintain",
+    title: "Deploy & maintain",
     body: "Fast, accessible, and observable in production. Done means it holds up after I walk away.",
   },
 ];
@@ -58,14 +58,14 @@ export default function About() {
             >
               WHO
             </span>
-            <span className="eyebrow relative">— 300m · the twilight zone</span>
+            <span className="eyebrow relative">— profile · player bio</span>
             <h2 className="display relative mt-3 text-4xl leading-tight text-frost md:text-5xl">
-              I&apos;d rather go deep on one thing than skim across ten.
+              I&apos;d rather max out one thing than half-level ten.
             </h2>
           </div>
-          <div className="mt-8 space-y-5 text-lg leading-relaxed text-glaze">
+          <div className="mt-8 space-y-5 text-lg leading-relaxed text-ink">
             <p>
-              Most of the interesting problems live below the surface — in how
+              Most of the interesting problems are the hidden bosses — in how
               data is shaped, how state moves, and how a system behaves when
               something goes wrong. That&apos;s the part I enjoy.
             </p>
@@ -80,18 +80,6 @@ export default function About() {
             </p>
           </div>
 
-          <div className="mt-10 flex flex-wrap gap-3">
-            {["TypeScript", "React", "Next.js", "Supabase", "Postgres", "Tailwind"].map(
-              (t) => (
-                <span
-                  key={t}
-                  className="rounded-full border border-glaze/25 bg-frost/5 px-4 py-1.5 font-mono text-xs text-glaze"
-                >
-                  {t}
-                </span>
-              )
-            )}
-          </div>
         </motion.div>
 
         {/* Process — a real sequence, so numbering is meaningful */}
@@ -116,19 +104,19 @@ export default function About() {
                 }}
                 className="glass group relative flex gap-5 rounded-2xl p-5 transition-transform hover:translate-x-1"
               >
-                <div className="relative z-10 flex h-14 w-14 flex-none items-center justify-center rounded-xl bg-abyss text-ripple ring-1 ring-ripple/40 transition-colors group-hover:bg-ripple group-hover:text-abyss">
+                <div className="relative z-10 flex h-14 w-14 flex-none items-center justify-center rounded-xl bg-abyss text-neon ring-1 ring-neon/45 transition-colors group-hover:bg-neon group-hover:text-abyss">
                   <Icon size={22} />
                 </div>
                 <div>
                   <div className="flex items-center gap-3">
-                    <span className="font-mono text-xs text-ripple">
+                    <span className="font-mono text-xs text-neon">
                       0{i + 1}
                     </span>
                     <h3 className="font-display text-lg font-semibold text-frost">
                       {s.title}
                     </h3>
                   </div>
-                  <p className="mt-1.5 text-sm leading-relaxed text-glaze">
+                  <p className="mt-1.5 text-sm leading-relaxed text-ink">
                     {s.body}
                   </p>
                 </div>

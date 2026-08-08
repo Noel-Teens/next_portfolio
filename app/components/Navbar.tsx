@@ -6,11 +6,10 @@ import { Menu, X } from "lucide-react";
 import { motion } from "framer-motion";
 
 const navLinks = [
-  { name: "Surface", href: "#" },
-  { name: "About", href: "#about" },
-  { name: "Stack", href: "#skills" },
-  { name: "Work", href: "#projects" },
-  { name: "Contact", href: "#contact" },
+  { name: "Home", href: "#" },
+  { name: "Profile", href: "#about" },
+  { name: "Loadout", href: "#skills" },
+  { name: "Missions", href: "#projects" },
 ];
 
 export default function Navbar() {
@@ -40,7 +39,7 @@ export default function Navbar() {
             href="#"
             className="group flex items-center gap-3 font-display text-lg font-bold text-frost"
           >
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-ripple/20 ring-1 ring-ripple/40 transition-transform group-hover:rotate-12">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-frost ring-1 ring-neon/50 shadow-[0_0_14px_rgba(127,233,255,0.35)] transition-transform group-hover:rotate-12">
               <Image
                 src="/logo.png"
                 alt="Teenie logo"
@@ -61,16 +60,16 @@ export default function Navbar() {
               <a
                 key={link.name}
                 href={link.href}
-                className="rounded-lg px-4 py-2 text-sm font-medium text-glaze transition-colors hover:bg-ripple/10 hover:text-frost"
+                className="rounded-lg px-4 py-2 text-base font-medium text-ink transition-colors hover:bg-neon/10 hover:text-frost"
               >
                 {link.name}
               </a>
             ))}
             <a
               href="#contact"
-              className="ml-3 rounded-lg bg-ripple px-5 py-2 text-sm font-semibold text-abyss transition-all hover:bg-glaze hover:shadow-[0_0_24px_rgba(94,176,200,0.5)]"
+              className="ml-3 rounded-lg bg-neon px-5 py-2 text-base font-semibold text-abyss transition-all hover:bg-frost hover:shadow-[0_0_24px_rgba(127,233,255,0.6)]"
             >
-              Get in touch
+              Press start
             </a>
           </div>
 

@@ -22,7 +22,7 @@ export default function Footer() {
     <footer className="border-t border-glaze/10 bg-[#071f28] py-12">
       <div className="shell flex flex-col items-center justify-between gap-8 md:flex-row">
         <div className="flex flex-col items-center gap-3 md:flex-row md:items-center md:text-left">
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-ripple/20 ring-1 ring-ripple/40">
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-frost ring-1 ring-neon/50 shadow-[0_0_14px_rgba(127,233,255,0.35)]">
             <Image
               src="/logo.png"
               alt="Teenie logo"
@@ -35,8 +35,8 @@ export default function Footer() {
             <h3 className="font-display text-lg font-bold text-frost">
               Teenie Rod Joshua B
             </h3>
-            <p className="mt-1 text-sm text-glaze">
-              Full-stack developer. Back at the surface — thanks for the dive.
+            <p className="mt-1 text-sm text-ink">
+              Full-stack developer. Thanks for playing — GG.
             </p>
           </div>
         </div>
@@ -48,7 +48,7 @@ export default function Footer() {
               href={href}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-xl border border-glaze/15 bg-frost/5 p-3 text-glaze transition-all hover:border-ripple/40 hover:text-ripple"
+              className="rounded-xl border border-neon/20 bg-frost/5 p-3 text-ink transition-all hover:border-neon/50 hover:text-neon"
               aria-label={label}
             >
               <Icon size={20} />
@@ -56,7 +56,7 @@ export default function Footer() {
           ))}
         </div>
 
-        <div className="text-center text-sm text-glaze md:text-right">
+        <div className="text-center text-sm text-ink md:text-right">
           <p className="font-semibold text-frost">
             &copy; {year} Teenie Rod Joshua B.
           </p>

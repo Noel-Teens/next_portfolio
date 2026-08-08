@@ -49,7 +49,7 @@ export default function SectionHeader({
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.6, ease, delay: 0.1 }}
-            className="max-w-md text-lg text-glaze"
+            className="max-w-md text-lg text-ink"
           >
             {intro}
           </motion.p>

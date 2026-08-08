@@ -10,20 +10,20 @@ export default async function Projects() {
 
   return (
     <section id="projects" className="py-24">
-      <Marquee text="recovered from the deep" />
+      <Marquee text="mission complete" />
 
       {/* heading stays in the padded shell; the browser below is full-bleed */}
       <div className="shell pt-16 pb-10">
         <SectionHeader
-          ghost="WORK"
-          eyebrow="900m · the finds"
-          title="Things I've brought up"
-          intro="Every find I've pulled up — select one from the log to inspect it."
+          ghost="MISSIONS"
+          eyebrow="mission log · cleared"
+          title="Missions cleared"
+          intro="Every run I've completed — select one from the log to review it."
         />
       </div>
 
       {projects.length === 0 ? (
-        <p className="shell text-glaze">
+        <p className="shell text-ink">
           No projects yet. Add some from the admin panel.
         </p>
       ) : (

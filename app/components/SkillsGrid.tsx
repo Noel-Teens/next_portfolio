@@ -54,30 +54,30 @@ function StatCard({
       transition={{ duration: 0.55, ease, delay: index * 0.08 }}
       className="glass group relative flex flex-col overflow-hidden rounded-2xl p-6 transition-shadow duration-500 hover:shadow-[0_0_0_1px_rgba(127,233,255,0.6),0_0_30px_rgba(127,233,255,0.4),0_0_80px_rgba(94,176,200,0.3),0_30px_60px_rgba(4,20,28,0.6)]"
     >
-      {/* dossier header strip — HUD framing, like a character-select callout */}
+      {/* class card header strip — HUD framing, like a character-select callout */}
       <div className="mb-5 flex items-center justify-between">
-        <span className="eyebrow text-[0.56rem] text-glaze/60">operative</span>
-        <span className="font-mono text-[0.56rem] uppercase tracking-widest text-glaze/50">
+        <span className="eyebrow text-[0.56rem]">class</span>
+        <span className="font-mono text-[0.56rem] uppercase tracking-widest text-neon/80">
           #{String(index + 1).padStart(2, "0")}
         </span>
       </div>
 
       {/* sigil + class name + level */}
       <div className="flex items-start gap-4">
-        <span className="flex h-14 w-14 flex-none items-center justify-center rounded-xl bg-ripple/12 text-ripple ring-1 ring-ripple/25 transition-all duration-500 group-hover:bg-ripple group-hover:text-abyss group-hover:ring-ripple">
+        <span className="flex h-14 w-14 flex-none items-center justify-center rounded-xl bg-neon/15 text-neon ring-1 ring-neon/35 transition-all duration-500 group-hover:bg-neon group-hover:text-abyss group-hover:ring-neon">
           <Icon className="h-6 w-6" />
         </span>
         <div className="min-w-0 flex-1">
           <h3 className="font-display text-xl font-semibold leading-tight text-frost">
             {category.title}
           </h3>
-          <span className="font-mono text-[0.62rem] uppercase tracking-widest text-glaze/55">
-            {count} {count === 1 ? "capability" : "capabilities"}
+          <span className="font-mono text-[0.62rem] uppercase tracking-widest text-ink/80">
+            {count} {count === 1 ? "skill" : "skills"}
           </span>
         </div>
         {/* LV badge — the real capability count */}
         <div className="flex-none text-right">
-          <span className="eyebrow block text-[0.5rem] text-glaze/50">lv</span>
+          <span className="eyebrow block text-[0.5rem]">lv</span>
           <span className="lit font-display text-2xl font-bold leading-none tabular-nums">
             {count}
           </span>
@@ -87,8 +87,8 @@ function StatCard({
       {/* proficiency bar + rank tier */}
       <div className="mt-6">
         <div className="mb-2 flex items-baseline justify-between">
-          <span className="eyebrow text-[0.54rem] text-glaze/60">proficiency</span>
-          <span className="font-mono text-xs tabular-nums text-glaze">
+          <span className="eyebrow text-[0.54rem]">proficiency</span>
+          <span className="font-mono text-xs tabular-nums text-ink">
             <span className="lit mr-1.5 font-display text-sm font-bold">{tier}</span>
             {proficiency}%
           </span>
@@ -106,8 +106,8 @@ function StatCard({
               key={i}
               className={`h-2 flex-1 rounded-sm transition-colors duration-500 ${
                 i < filled
-                  ? "bg-ripple shadow-[0_0_10px_rgba(94,176,200,0.55)]"
-                  : "bg-frost/10"
+                  ? "bg-neon shadow-[0_0_10px_rgba(127,233,255,0.6)]"
+                  : "bg-frost/15"
               }`}
             />
           ))}
@@ -115,8 +115,8 @@ function StatCard({
       </div>
 
       {/* loadout — the equipped skills, always visible */}
-      <div className="mt-6 border-t border-glaze/12 pt-5">
-        <span className="eyebrow mb-3 block text-[0.54rem] text-glaze/60">
+      <div className="mt-6 border-t border-neon/15 pt-5">
+        <span className="eyebrow mb-3 block text-[0.54rem]">
           loadout
         </span>
         <div className="flex flex-wrap gap-2">

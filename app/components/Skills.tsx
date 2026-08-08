@@ -11,14 +11,14 @@ export default async function Skills() {
     <section id="skills" className="relative overflow-hidden py-28">
       <div className="shell">
         <SectionHeader
-          ghost="STACK"
-          eyebrow="600m · the instruments"
-          title="What I dive with"
-          intro="The kit I reach for by default — chosen for reliability under pressure, not novelty."
+          ghost="LOADOUT"
+          eyebrow="skill tree · equipped"
+          title="My loadout"
+          intro="The kit I main — picked for reliability under fire, not for the hype."
         />
 
         {skills.length === 0 ? (
-          <p className="text-glaze">
+          <p className="text-ink">
             No skills yet. Add some from the admin panel.
           </p>
         ) : (

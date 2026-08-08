@@ -71,7 +71,7 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
 
                 <span
                   className={`font-mono text-xs tabular-nums transition-colors ${
-                    on ? "lit" : "text-glaze/40"
+                    on ? "lit" : "text-ink/60"
                   }`}
                 >
                   {String(i + 1).padStart(2, "0")}
@@ -97,12 +97,12 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
                 <span className="min-w-0 flex-1">
                   <span
                     className={`block truncate font-display text-base font-semibold transition-colors ${
-                      on ? "text-frost" : "text-glaze group-hover:text-frost"
+                      on ? "text-frost" : "text-ink group-hover:text-frost"
                     }`}
                   >
                     {p.title}
                   </span>
-                  <span className="block truncate font-mono text-[0.65rem] text-glaze/50">
+                  <span className="block truncate font-mono text-[0.65rem] text-ink/70">
                     {p.tags.slice(0, 3).join(" · ") || "—"}
                   </span>
                 </span>
@@ -150,12 +150,12 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
 
               {/* find index — over the image, top-left */}
               <div className="absolute left-5 top-5 flex items-center gap-3 md:left-12 md:top-6">
-                <span className="rounded bg-abyss/70 px-2.5 py-1 font-mono text-[0.6rem] uppercase tracking-widest text-glaze backdrop-blur">
-                  find {String(sel + 1).padStart(2, "0")} / {total}
+                <span className="rounded bg-abyss/80 px-2.5 py-1 font-mono text-[0.6rem] uppercase tracking-widest text-frost backdrop-blur">
+                  mission {String(sel + 1).padStart(2, "0")} / {total}
                 </span>
                 {active.featured && (
-                  <span className="rounded-full border border-[#7fe9ff]/40 bg-[#7fe9ff]/10 px-2.5 py-1 font-mono text-[0.55rem] uppercase tracking-widest text-[#7fe9ff]">
-                    featured
+                  <span className="rounded-full border border-[#7fe9ff]/50 bg-[#7fe9ff]/15 px-2.5 py-1 font-mono text-[0.55rem] uppercase tracking-widest text-[#7fe9ff]">
+                    boss fight
                   </span>
                 )}
               </div>
@@ -239,7 +239,7 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
                         className="flex items-center gap-2 rounded-lg bg-[#7fe9ff] px-5 py-2.5 text-sm font-semibold text-abyss shadow-[0_0_28px_rgba(127,233,255,0.5)] transition-all hover:bg-frost"
                       >
                         <Play size={14} className="translate-x-px fill-abyss" />
-                        Open live
+                        Play live
                       </a>
                     )}
                     {active.github_url && (
@@ -253,8 +253,8 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
                       </a>
                     )}
                     {!hasLiveUrl(active.live_url) && !active.github_url && (
-                      <span className="flex items-center gap-2 font-mono text-xs text-glaze/60">
-                        Catalogued — no public link yet <ArrowUpRight size={14} />
+                      <span className="flex items-center gap-2 font-mono text-xs text-ink/70">
+                        Logged — no public link yet <ArrowUpRight size={14} />
                       </span>
                     )}
                   </div>
