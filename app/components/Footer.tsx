@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Linkedin, Instagram, Github } from "lucide-react";
 
 const socials = [
@@ -20,13 +21,24 @@ export default function Footer() {
   return (
     <footer className="border-t border-glaze/10 bg-[#071f28] py-12">
       <div className="shell flex flex-col items-center justify-between gap-8 md:flex-row">
-        <div className="text-center md:text-left">
-          <h3 className="font-display text-lg font-bold text-frost">
-            Teenie Rod Joshua B
-          </h3>
-          <p className="mt-1 text-sm text-glaze">
-            Full-stack developer. Back at the surface — thanks for the dive.
-          </p>
+        <div className="flex flex-col items-center gap-3 md:flex-row md:items-center md:text-left">
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-ripple/20 ring-1 ring-ripple/40">
+            <Image
+              src="/logo.png"
+              alt="Teenie logo"
+              width={32}
+              height={32}
+              className="h-8 w-8 object-contain"
+            />
+          </span>
+          <div className="text-center md:text-left">
+            <h3 className="font-display text-lg font-bold text-frost">
+              Teenie Rod Joshua B
+            </h3>
+            <p className="mt-1 text-sm text-glaze">
+              Full-stack developer. Back at the surface — thanks for the dive.
+            </p>
+          </div>
         </div>
 
         <div className="flex gap-3">

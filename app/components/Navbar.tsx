@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Menu, X, Waves } from "lucide-react";
+import Image from "next/image";
+import { Menu, X } from "lucide-react";
 import { motion } from "framer-motion";
 
 const navLinks = [
@@ -39,8 +40,15 @@ export default function Navbar() {
             href="#"
             className="group flex items-center gap-3 font-display text-lg font-bold text-frost"
           >
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-ripple/20 text-ripple ring-1 ring-ripple/40 transition-transform group-hover:rotate-12">
-              <Waves size={18} />
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-ripple/20 ring-1 ring-ripple/40 transition-transform group-hover:rotate-12">
+              <Image
+                src="/logo.png"
+                alt="Teenie logo"
+                width={28}
+                height={28}
+                priority
+                className="h-7 w-7 object-contain"
+              />
             </span>
             <span>
               Teenie<span className="text-ripple">.</span>
