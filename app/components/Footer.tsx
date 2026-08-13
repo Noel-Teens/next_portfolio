@@ -11,7 +11,7 @@ import { Linkedin, Instagram, Github, ArrowUp } from "lucide-react";
 const socials = [
   {
     Icon: Linkedin,
-    href: "https://www.linkedin.com/in/teenie-rod-joshua-bb0bbb327/",
+    href: "https://www.linkedin.com/in/teenie-rod-joshua/",
     label: "LinkedIn",
     tag: "in",
   },

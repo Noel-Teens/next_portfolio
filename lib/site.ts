@@ -29,7 +29,7 @@ export const site = {
   // Used for JSON-LD `sameAs` and social discovery.
   socials: {
     github: "https://github.com/Noel-Teens",
-    linkedin: "https://www.linkedin.com/in/teenie-rod-joshua-bb0bbb327/",
+    linkedin: "https://www.linkedin.com/in/teenie-rod-joshua/",
     instagram: "https://www.instagram.com/noel_teens/",
   },
   // Brand colors (match the console theme) for manifest + theme-color.
