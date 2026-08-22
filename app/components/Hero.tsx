@@ -2,65 +2,60 @@
 
 import Image from "next/image";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
-import { Radar } from "lucide-react";
+import { ArrowRight, Play } from "lucide-react";
+import type { Profile } from "@/lib/supabase/types";
 
-// HERO — "the diver arrives". An editorial, character-anchored composition
-// grafted from the reference images (Digital Hunters / oversized-type portfolio
-// covers). The headline is split around the figure: "BUILDING" spans the whole
-// width up top, then "IN THE" and "DEEP" sit inboard, hugging the diver who
-// stands centred between them. Below, two columns of real writing — no buttons,
-// no dashboard readouts — carry the message.
+// HERO — the "giant name + walking character" key art (Mafia reference), in the
+// cream/black editorial identity. The mechanic: one enormous full-bleed word
+// ("TEENIE") is the backdrop; the character stands OVER it, interlocking the
+// letters. Content hugs the corners over big negative space:
+//   • top-left    — a three-line creed (the "LOYALTY IS EARNED" beat)
+//   • centre      — giant TEENIE with the character interlocking it
+//   • bottom-left — primary actions (View work / résumé), like PRE-ORDER / TRAILER
+//   • bottom-right— availability meta, like "NEW GAME 2024"
 //
-// Responsive: on large screens the figure is a foreground centrepiece the type
-// wraps around; on small screens it drops behind the type as a dimmed backdrop
-// so the copy stays readable. prefers-reduced-motion stills all drift/parallax.
+// Hierarchy comes from WEIGHT + solid black shapes on cream — no glows.
+// Character is grayscale so it sits in the mono art. Mobile keeps the giant word
+// but stacks the copy and dims the figure behind a cream scrim.
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-export default function Hero() {
+export default function Hero({ profile }: { profile: Profile }) {
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll();
-  const yType = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 90]);
-  const yChar = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -70]);
-  const fade = useTransform(scrollYProgress, [0, 0.25], [1, 0]);
+  const yWord = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 40]);
+  const yChar = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -50]);
 
   return (
-    <section className="relative z-20 flex min-h-screen flex-col justify-center overflow-x-clip pb-16 pt-28">
-      {/* ── Decorative bloom, clipped to the hero box ─────────────────────── */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-[1] overflow-hidden">
-        <motion.div
-          style={{ opacity: fade }}
-          className="glow-horizon absolute inset-x-0 bottom-[14vh] h-px"
-        />
-        <div
-          className="absolute inset-x-0 bottom-0 h-[34vh]"
-          style={{
-            background:
-              "radial-gradient(55% 100% at 50% 100%, rgba(127,233,255,0.18), transparent 70%)",
-          }}
-        />
-      </div>
+    <section className="relative z-20 min-h-[44rem] overflow-hidden lg:h-screen">
+      {/* ── FULL-SECTION ART LAYERS. The giant word + character are absolute to
+          the whole section (not a squeezed flex cell), so the character can
+          stand nearly full-height and tower over the word — Mafia key art. ── */}
 
-      {/* ── The character. Centred at every breakpoint. On mobile it's a dimmed
-          backdrop behind the centred copy; at lg+ it becomes the foreground
-          centrepiece the split headline wraps, bleeding into About. ── */}
+      {/* GIANT WORD — vertically centred, full-bleed, behind the figure. */}
+      <motion.div
+        style={{ y: yWord }}
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-1/2 z-[4] flex -translate-y-1/2 justify-center"
+      >
+        <span className="display block w-full text-center text-[26vw] font-bold leading-none tracking-[-0.04em] text-frost lg:text-[22vw]">
+          TEENIE
+        </span>
+      </motion.div>
+
+      {/* CHARACTER — dominant figure, runs nearly the FULL section height (head
+          up near the navbar, feet at the bottom), towering over the word like
+          the Mafia key art. */}
       <motion.div
         style={{ y: yChar }}
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 inset-y-0 z-[5] flex justify-center lg:-bottom-[36vh] lg:top-20 lg:z-[15]"
+        className="pointer-events-none absolute inset-x-0 bottom-[-6%] top-[8%] z-[5] flex items-end justify-center lg:top-[2%]"
       >
-        <div
-          className="absolute left-1/2 top-[42%] h-[54%] w-[62%] max-w-[42rem] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl lg:h-[62%] lg:w-[58%]"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(127,233,255,0.26), rgba(94,176,200,0.08) 45%, transparent 70%)",
-          }}
-        />
         <motion.div
-          initial={{ opacity: 0, y: 70 }}
+          initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.1, ease, delay: 0.35 }}
-          className="animate-drift relative flex h-full items-end"
+          transition={{ duration: 1.1, ease, delay: 0.3 }}
+          className="animate-drift flex h-full items-end"
         >
           <Image
             src="/character.png"
@@ -68,143 +63,90 @@ export default function Hero() {
             width={1024}
             height={1536}
             preload
-            sizes="(max-width: 1024px) 80vw, 46vw"
-            className="h-full w-auto max-w-none select-none object-contain object-bottom opacity-[0.18] drop-shadow-[0_24px_70px_rgba(4,20,28,0.65)] sm:opacity-25 lg:opacity-100"
+            sizes="(max-width: 1024px) 92vw, 58vw"
+            className="h-full w-auto max-w-none select-none object-contain object-bottom opacity-25 grayscale contrast-[1.05] drop-shadow-[0_20px_50px_rgba(20,18,14,0.28)] sm:opacity-40 lg:opacity-100"
           />
         </motion.div>
       </motion.div>
 
-      {/* Mobile-only scrim: a vertical darkening (denser toward the top where the
-          headline sits) so centred copy reads cleanly over the centred figure.
-          Removed at lg+ where layout separates text and figure spatially. */}
+      {/* Mobile cream scrim so the overlaid copy reads over the figure. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 z-[8] lg:hidden"
+        className="pointer-events-none absolute inset-0 z-[6] lg:hidden"
         style={{
           background:
-            "linear-gradient(180deg, rgba(7,31,40,0.78) 0%, rgba(7,31,40,0.62) 50%, rgba(7,31,40,0.72) 100%)",
+            "linear-gradient(180deg, rgba(242,239,233,0.72) 0%, rgba(242,239,233,0.45) 45%, rgba(242,239,233,0.85) 100%)",
         }}
       />
 
-      {/* ── FULL-BLEED headline. Uses .shell gutters only; words are pushed to
-          the screen edges so the type spans the whole display. ─────────────── */}
-      <motion.div style={{ y: yType }} className="shell relative z-10 w-full">
-        {/* eyebrow */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease }}
-          className="mb-4 flex items-center justify-center gap-3 lg:justify-start"
-        >
-          <span className="rule-fade w-10 flex-none" />
-          <span className="eyebrow flex items-center gap-2 text-[0.66rem]">
-            <Radar size={13} /> player online · rank S
+      {/* ── TOP-LEFT creed — overlay ── */}
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, ease, delay: 0.1 }}
+        className="shell absolute inset-x-0 top-0 z-20 pt-28 text-center lg:pt-[15vh] lg:text-left"
+      >
+        <div className="mb-3 flex items-center justify-center gap-3 lg:justify-start">
+          <span className="rule-fade w-8 flex-none" />
+          <span className="eyebrow flex items-center gap-2 text-[0.6rem]">
+            <span className="h-1.5 w-1.5 rounded-full bg-neon" />
+            player online · rank S
           </span>
-        </motion.div>
-
-        {/* Desktop (lg+) is the committed, edge-split composition — words pushed
-            to the outer edges of an 86rem band around a fixed CENTRE SPACER that
-            reserves the character's column. Those desktop classes are LEFT EXACTLY
-            as shipped. Mobile (<lg) is layered on via `max-lg:` overrides only:
-            smaller type, centred, gapped — so the words never crowd the screen
-            edges. No `lg:` desktop value is touched. */}
-        <h1 className="display text-center text-frost drop-shadow-[0_2px_24px_rgba(4,20,28,0.7)] lg:text-left">
-          {/* Row 1 — short words, big, small centre gap */}
-          <span className="mx-auto flex w-full max-w-[min(100%,86rem)] items-baseline justify-between text-[clamp(2.75rem,13vw,12.5rem)] leading-[0.86] tracking-[-0.02em] max-lg:justify-center max-lg:gap-[0.3em] max-lg:text-[clamp(2.25rem,10.5vw,4rem)] max-lg:leading-[0.9]">
-            <motion.span
-              className="block whitespace-nowrap"
-              initial={{ clipPath: "inset(0 0 100% 0)", y: "0.3em" }}
-              animate={{ clipPath: "inset(0 0 0% 0)", y: 0 }}
-              transition={{ duration: 0.9, ease, delay: 0.1 }}
-            >
-              PRESS
-            </motion.span>
-            {/* centre spacer for the figure — desktop only */}
-            <span aria-hidden className="w-[15%] flex-none max-lg:hidden" />
-            <motion.span
-              className="block whitespace-nowrap"
-              initial={{ clipPath: "inset(0 0 100% 0)", y: "0.3em" }}
-              animate={{ clipPath: "inset(0 0 0% 0)", y: 0 }}
-              transition={{ duration: 0.9, ease, delay: 0.18 }}
-            >
-              START
-            </motion.span>
-          </span>
-
-          {/* Row 2 — long words, smaller, WIDER centre gap */}
-          <span className="mx-auto mt-1 flex w-full max-w-[min(100%,86rem)] items-baseline justify-between text-[clamp(2.1rem,9.5vw,8.75rem)] leading-[0.86] tracking-[-0.02em] sm:mt-2 max-lg:justify-center max-lg:gap-[0.3em] max-lg:text-[clamp(1.6rem,7.5vw,3rem)] max-lg:leading-[0.9]">
-            <motion.span
-              className="block whitespace-nowrap"
-              initial={{ clipPath: "inset(0 0 100% 0)", y: "0.3em" }}
-              animate={{ clipPath: "inset(0 0 0% 0)", y: 0 }}
-              transition={{ duration: 0.9, ease, delay: 0.24 }}
-            >
-              TO&nbsp;BUILD
-            </motion.span>
-            {/* wider centre spacer — long words need more clearance; desktop only */}
-            <span aria-hidden className="w-[20%] flex-none max-lg:hidden" />
-            <motion.span
-              className="block whitespace-nowrap"
-              initial={{ clipPath: "inset(0 0 100% 0)", y: "0.3em" }}
-              animate={{ clipPath: "inset(0 0 0% 0)", y: 0 }}
-              transition={{ duration: 0.9, ease, delay: 0.34 }}
-            >
-              <span className="text-gradient">WORLDS</span>
-            </motion.span>
-          </span>
-        </h1>
+        </div>
+        <p className="display text-[clamp(1.1rem,2vw,1.9rem)] font-bold uppercase leading-[1.05] tracking-tight text-frost">
+          Built to last.
+          <br />
+          Shipped with care.
+          <br />
+          <span className="text-ripple">Systems that hold.</span>
+        </p>
       </motion.div>
 
-      {/* ── Lower band: two columns, each a mono label → enlarged display lede →
-          quiet supporting line. Hierarchy lets the copy hold up over the art. ── */}
-      <div className="shell relative z-20 mt-auto grid w-full grid-cols-1 items-end gap-x-16 gap-y-12 pt-14 lg:grid-cols-2">
-        {/* Left — who I am */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease, delay: 0.5 }}
-          className="mx-auto max-w-xl text-center lg:mx-0 lg:text-left"
-        >
-          <div className="mb-4 flex items-center justify-center gap-3 lg:justify-start">
-            <span className="rule-fade w-8 flex-none" />
-            <span className="eyebrow text-[0.6rem]">the developer</span>
-            <span className="rule-fade w-8 flex-none lg:hidden" />
+      {/* ── BOTTOM ROW — overlay: actions (left) + availability meta (right) ── */}
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, ease, delay: 0.5 }}
+        className="shell absolute inset-x-0 bottom-0 z-20 pb-10 lg:pb-[7vh]"
+      >
+        <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
+          {/* actions */}
+          <div className="flex items-center gap-5">
+            <a
+              href="#projects"
+              className="group flex items-center gap-2 rounded-none bg-neon px-7 py-3.5 font-semibold text-abyss transition-colors hover:bg-frost"
+            >
+              View work
+              <ArrowRight
+                size={16}
+                className="transition-transform group-hover:translate-x-0.5"
+              />
+            </a>
+            <a
+              href="#contact"
+              className="group flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-ink transition-colors hover:text-frost"
+            >
+              <span className="flex h-8 w-8 items-center justify-center rounded-full border border-ink/40 transition-colors group-hover:border-frost">
+                <Play size={12} className="translate-x-px fill-current" />
+              </span>
+              Hire me
+            </a>
           </div>
-          <p className="lede text-[clamp(1.4rem,2.3vw,2.1rem)]">
-            I&apos;m <em>Teenie Rod Joshua B</em> — a developer who builds
-            thoughtful software from the ground up.
-          </p>
-          <p className="copy-legible mx-auto mt-5 max-w-md text-base leading-relaxed lg:mx-0">
-            I turn ideas into playable software — working across interfaces,
-            systems, and everything in between. I scout the problem first, then
-            build things that are clear, reliable, and actually fun to use.
-          </p>
-        </motion.div>
 
-        {/* Right — how I work */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease, delay: 0.64 }}
-          className="mx-auto max-w-xl text-center lg:mx-0 lg:justify-self-end lg:text-right"
-        >
-          <div className="mb-4 flex items-center justify-center gap-3 lg:justify-end">
-            <span className="rule-fade w-8 flex-none lg:hidden" />
-            <span className="eyebrow text-[0.6rem]">the approach</span>
-            <span className="rule-fade w-8 flex-none" />
+          {/* availability meta */}
+          <div className="text-center sm:text-right">
+            <p className="flex items-center justify-center gap-2 font-display text-lg font-bold text-frost sm:justify-end">
+              {profile.open_to_work && (
+                <span className="h-2 w-2 rounded-full bg-neon" />
+              )}
+              {profile.status_label || "Open to work"}
+            </p>
+            <p className="mt-0.5 font-mono text-[0.62rem] uppercase tracking-[0.26em] text-ripple">
+              CS &rsquo;27{profile.region ? ` · ${profile.region}` : ""}
+            </p>
           </div>
-          <p className="lede text-[clamp(1.4rem,2.3vw,2.1rem)]">
-            I&apos;d rather build something <em>meaningful</em> than build
-            something just to ship.
-          </p>
-          <p className="copy-legible mx-auto mt-5 max-w-md text-base leading-relaxed lg:ml-auto lg:mr-0">
-            I read the level before rushing it — simplifying the easy stretches
-            and grinding the hard bosses. Every project is another run: a chance
-            to level up, clear a real problem, and leave the map better than I
-            found it.
-          </p>
-        </motion.div>
-      </div>
+        </div>
+      </motion.div>
     </section>
   );
 }

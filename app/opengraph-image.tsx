@@ -23,9 +23,9 @@ export default function OgImage() {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: "72px 80px",
-          backgroundColor: "#0a2c38",
+          backgroundColor: "#0d0d0d",
           backgroundImage:
-            "radial-gradient(1200px 500px at 15% -10%, rgba(127,233,255,0.18), transparent 60%), radial-gradient(900px 500px at 110% 120%, rgba(94,176,200,0.16), transparent 55%)",
+            "radial-gradient(1200px 500px at 15% -10%, rgba(255,255,255,0.18), transparent 60%), radial-gradient(900px 500px at 110% 120%, rgba(255,255,255,0.16), transparent 55%)",
           color: "#e4f4f8",
           fontFamily: "sans-serif",
         }}
@@ -43,7 +43,7 @@ export default function OgImage() {
               display: "flex",
               alignItems: "center",
               gap: 16,
-              color: "#7fe9ff",
+              color: "#ffffff",
               fontSize: 26,
               letterSpacing: 8,
               fontWeight: 700,
@@ -54,7 +54,7 @@ export default function OgImage() {
                 width: 14,
                 height: 14,
                 borderRadius: 999,
-                backgroundColor: "#7fe9ff",
+                backgroundColor: "#ffffff",
               }}
             />
             PLAYER ONLINE
@@ -62,12 +62,12 @@ export default function OgImage() {
           <div
             style={{
               display: "flex",
-              border: "2px solid rgba(127,233,255,0.5)",
+              border: "2px solid rgba(255,255,255,0.5)",
               borderRadius: 12,
               padding: "8px 20px",
               fontSize: 24,
               letterSpacing: 4,
-              color: "#7fe9ff",
+              color: "#ffffff",
               fontWeight: 700,
             }}
           >
@@ -92,7 +92,7 @@ export default function OgImage() {
             style={{
               marginTop: 18,
               fontSize: 42,
-              color: "#9fd3e3",
+              color: "#9a9a9a",
               fontWeight: 600,
               display: "flex",
             }}
@@ -115,8 +115,8 @@ export default function OgImage() {
                 key={t}
                 style={{
                   display: "flex",
-                  border: "2px solid rgba(127,233,255,0.35)",
-                  backgroundColor: "rgba(127,233,255,0.08)",
+                  border: "2px solid rgba(255,255,255,0.35)",
+                  backgroundColor: "rgba(255,255,255,0.08)",
                   borderRadius: 10,
                   padding: "10px 20px",
                   fontSize: 26,
@@ -127,7 +127,7 @@ export default function OgImage() {
               </div>
             ))}
           </div>
-          <div style={{ display: "flex", fontSize: 26, color: "#7fe9ff" }}>
+          <div style={{ display: "flex", fontSize: 26, color: "#ffffff" }}>
             {site.url.replace(/^https?:\/\//, "")}
           </div>
         </div>

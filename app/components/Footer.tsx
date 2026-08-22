@@ -33,14 +33,14 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative overflow-hidden border-t border-neon/15 bg-[#061a22]">
-      {/* faint scanline wash so the panel reads as a lit screen, not flat fill */}
+    <footer className="band-ink relative overflow-hidden border-t border-white/10">
+      {/* faint top vignette */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-[0.5]"
         style={{
           background:
-            "radial-gradient(120% 80% at 50% 0%, rgba(127,233,255,0.10), transparent 60%)",
+            "radial-gradient(120% 80% at 50% 0%, rgba(0,0,0,0.06), transparent 60%)",
         }}
       />
 
@@ -58,7 +58,7 @@ export default function Footer() {
           <span className="text-gradient">OVER</span>
           <span
             aria-hidden
-            className="ml-2 inline-block h-[0.7em] w-[0.14em] translate-y-[0.04em] bg-neon align-baseline animate-cursor-blink shadow-[0_0_12px_rgba(127,233,255,0.7)]"
+            className="ml-2 inline-block h-[0.7em] w-[0.14em] translate-y-[0.04em] bg-neon align-baseline animate-cursor-blink shadow-[0_0_12px_rgba(0,0,0,0.7)]"
           />
         </h2>
 
@@ -69,7 +69,7 @@ export default function Footer() {
           </span>
           <a
             href="#contact"
-            className="group inline-flex items-center gap-2 rounded-lg bg-neon px-6 py-2.5 font-mono text-sm font-semibold uppercase tracking-widest text-abyss transition-all hover:bg-frost hover:shadow-[0_0_28px_rgba(127,233,255,0.6)]"
+            className="group inline-flex items-center gap-2 rounded-lg bg-neon px-6 py-2.5 font-mono text-sm font-semibold uppercase tracking-widest text-abyss transition-all hover:bg-frost hover:shadow-[0_0_28px_rgba(0,0,0,0.6)]"
           >
             <span className="text-base leading-none">▸</span> Contact
           </a>
@@ -100,20 +100,20 @@ export default function Footer() {
         {/* credits — a terminal readout carrying identity + build + legal */}
         <div className="mx-auto mt-14 max-w-3xl rounded-2xl border border-neon/15 bg-abyss/50 p-5 font-mono text-xs leading-relaxed">
           <div className="mb-3 flex items-center gap-2 border-b border-neon/10 pb-3">
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-frost ring-1 ring-neon/50">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white">
               <Image
                 src="/logo.png"
                 alt="Teenie logo"
                 width={22}
                 height={22}
-                className="h-[22px] w-[22px] object-contain"
+                className="h-[22px] w-[22px] object-contain grayscale brightness-0"
               />
             </span>
             <span className="text-[0.6rem] uppercase tracking-[0.3em] text-neon/80">
               credits
             </span>
             <span className="ml-auto flex items-center gap-1.5 text-[0.66rem] text-ink/70">
-              <span className="h-1.5 w-1.5 rounded-full bg-neon shadow-[0_0_8px_#7fe9ff]" />
+              <span className="h-1.5 w-1.5 rounded-full bg-neon shadow-[0_0_8px_#111111]" />
               online
             </span>
           </div>
@@ -143,7 +143,7 @@ export default function Footer() {
         <div className="mt-10 flex justify-center">
           <a
             href="#"
-            className="group relative inline-flex items-center gap-2.5 rounded-lg border border-neon/25 bg-abyss/40 px-7 py-3 font-mono text-[0.7rem] uppercase tracking-[0.3em] text-ink transition-all hover:border-neon/50 hover:bg-neon/10 hover:text-neon hover:shadow-[0_0_24px_rgba(127,233,255,0.25)]"
+            className="group relative inline-flex items-center gap-2.5 rounded-lg border border-neon/25 bg-abyss/40 px-7 py-3 font-mono text-[0.7rem] uppercase tracking-[0.3em] text-ink transition-all hover:border-neon/50 hover:bg-neon/10 hover:text-neon hover:shadow-[0_0_24px_rgba(0,0,0,0.25)]"
           >
             {/* HUD corner brackets — the console motif, brightened on hover */}
             <span aria-hidden className="pointer-events-none absolute left-1 top-1 h-2 w-2 border-l border-t border-neon/40 transition-colors group-hover:border-neon" />

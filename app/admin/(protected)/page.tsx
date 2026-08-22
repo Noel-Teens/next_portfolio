@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import type { Project, SkillCategory, Message } from "@/lib/supabase/types";
+import { getProfile } from "@/lib/data";
 import AdminTabs from "./AdminTabs";
 
 export const metadata = {
@@ -12,7 +13,8 @@ export const metadata = {
 export default async function AdminDashboard() {
   const supabase = await createClient();
 
-  const [projectsRes, skillsRes, messagesRes] = await Promise.all([
+  const [profile, projectsRes, skillsRes, messagesRes] = await Promise.all([
+    getProfile(),
     supabase
       .from("projects")
       .select("*")
@@ -33,7 +35,12 @@ export default async function AdminDashboard() {
       <h1 className="text-3xl font-black text-slate-900 dark:text-white mb-8">
         Dashboard
       </h1>
-      <AdminTabs projects={projects} skills={skills} messages={messages} />
+      <AdminTabs
+        profile={profile}
+        projects={projects}
+        skills={skills}
+        messages={messages}
+      />
     </div>
   );
 }

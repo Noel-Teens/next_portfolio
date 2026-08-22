@@ -14,7 +14,7 @@ export default async function Skills() {
           ghost="LOADOUT"
           eyebrow="skill tree · equipped"
           title="My loadout"
-          intro="The kit I main — picked for reliability under fire, not for the hype."
+          intro="Pick a class to see what's equipped — the tools I know best and trust in production."
         />
 
         {skills.length === 0 ? (

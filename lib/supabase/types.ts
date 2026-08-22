@@ -28,6 +28,19 @@ export type SkillCategory = {
   created_at: string;
 };
 
+// Single-row "player HUD" profile — the gamified status facts surfaced across
+// the public site (hero stat strip, now-playing bar, contact HUD). Always the
+// row with id = 1 (see supabase_query/0003_profile_singleton.sql).
+export type Profile = {
+  id: number;
+  open_to_work: boolean;
+  status_label: string;
+  region: string;
+  now_playing: string;
+  reply_time: string;
+  updated_at: string;
+};
+
 export type Message = {
   id: string;
   name: string;
