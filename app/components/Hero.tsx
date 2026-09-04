@@ -32,15 +32,36 @@ export default function Hero({ profile }: { profile: Profile }) {
           the whole section (not a squeezed flex cell), so the character can
           stand nearly full-height and tower over the word — Mafia key art. ── */}
 
-      {/* GIANT WORD — vertically centred, full-bleed, behind the figure. */}
+      {/* GIANT WORD — stretched EDGE TO EDGE via SVG textLength=100%, so the
+          name fills the full screen width on every breakpoint (truly responsive,
+          no per-size font tuning). Vertically centred behind the figure. */}
       <motion.div
         style={{ y: yWord }}
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-1/2 z-[4] flex -translate-y-1/2 justify-center"
+        className="pointer-events-none absolute inset-x-0 top-[56%] z-[4] -translate-y-1/2 px-[2vw]"
       >
-        <span className="display block w-full text-center text-[26vw] font-bold leading-none tracking-[-0.04em] text-frost lg:text-[22vw]">
-          TEENIE
-        </span>
+        {/* viewBox height (28) < font cap-height scaled: the text is scaled
+            vertically (scaleY 1.4) so only its HEIGHT grows — width stays locked
+            to 100% by textLength. Adjust the scaleY / viewBox height to taste. */}
+        <svg
+          viewBox="0 0 100 34"
+          preserveAspectRatio="xMidYMid meet"
+          className="block w-full overflow-visible"
+        >
+          <text
+            x="50"
+            y="24"
+            textAnchor="middle"
+            textLength="100"
+            lengthAdjust="spacingAndGlyphs"
+            fontFamily="var(--font-display)"
+            fontWeight="700"
+            className="fill-frost"
+            style={{ fontSize: "20px", transform: "scaleY(1.7)", transformOrigin: "center", transformBox: "fill-box" }}
+          >
+            TEENIE
+          </text>
+        </svg>
       </motion.div>
 
       {/* CHARACTER — dominant figure, runs nearly the FULL section height (head
