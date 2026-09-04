@@ -23,16 +23,27 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
     (a, b) => Number(b.featured) - Number(a.featured)
   );
   const [sel, setSel] = useState(0);
+  const listRef = useRef<HTMLUListElement>(null);
   const tileRefs = useRef<(HTMLLIElement | null)[]>([]);
+  const didMount = useRef(false);
 
-  // Smoothly scroll the selected tile into view within the (scrollbar-less)
-  // roster — the "scroll animation without a scrollbar".
+  // Keep the selected tile in view WITHIN the roster only — never scroll the
+  // window (that made the page jump to this section on load). We skip the first
+  // render, then adjust the roster container's own scroll position directly.
   useEffect(() => {
-    tileRefs.current[sel]?.scrollIntoView({
-      behavior: "smooth",
-      block: "nearest",
-      inline: "nearest",
-    });
+    if (!didMount.current) {
+      didMount.current = true;
+      return;
+    }
+    const list = listRef.current;
+    const tile = tileRefs.current[sel];
+    if (!list || !tile) return;
+    // scroll the container so the tile is centred, without touching the window
+    const top =
+      tile.offsetTop - list.clientHeight / 2 + tile.clientHeight / 2;
+    const left =
+      tile.offsetLeft - list.clientWidth / 2 + tile.clientWidth / 2;
+    list.scrollTo({ top, left, behavior: "smooth" });
   }, [sel]);
 
   const active = items[sel] ?? items[0];
@@ -50,6 +61,7 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
           roster
         </div>
         <ul
+          ref={listRef}
           role="listbox"
           aria-label="Missions"
           className="no-scrollbar flex snap-x gap-3 overflow-x-auto scroll-smooth pb-2 lg:h-[30rem] lg:snap-y lg:flex-col lg:gap-2.5 lg:overflow-y-auto lg:pb-0 lg:[mask-image:linear-gradient(to_bottom,#000_calc(100%-2rem),transparent)]"
