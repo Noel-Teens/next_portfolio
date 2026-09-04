@@ -2,14 +2,21 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Linkedin, Github, Instagram } from "lucide-react";
 import { motion } from "framer-motion";
+import { site } from "@/lib/site";
 
 const navLinks = [
   { name: "Home", href: "#" },
   { name: "Profile", href: "#about" },
   { name: "Loadout", href: "#skills" },
   { name: "Missions", href: "#projects" },
+];
+
+const socials = [
+  { Icon: Linkedin, href: site.socials.linkedin, label: "LinkedIn" },
+  { Icon: Github, href: site.socials.github, label: "GitHub" },
+  { Icon: Instagram, href: site.socials.instagram, label: "Instagram" },
 ];
 
 export default function Navbar() {
@@ -39,14 +46,14 @@ export default function Navbar() {
             href="#"
             className="group flex items-center gap-3 font-display text-lg font-bold text-frost"
           >
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-frost ring-1 ring-neon/50 shadow-[0_0_14px_rgba(127,233,255,0.35)] transition-transform group-hover:rotate-12">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-neon transition-transform group-hover:rotate-12">
               <Image
                 src="/logo.png"
                 alt="Teenie logo"
                 width={28}
                 height={28}
                 priority
-                className="h-7 w-7 object-contain"
+                className="h-7 w-7 object-contain grayscale brightness-0 invert"
               />
             </span>
             <span>
@@ -54,8 +61,9 @@ export default function Navbar() {
             </span>
           </a>
 
-          {/* Desktop */}
-          <div className="hidden items-center gap-1 md:flex">
+          {/* Desktop nav — links sit LEFT (just after the logo) so the centre
+              stays clear of the character's head. */}
+          <div className="ml-8 hidden items-center gap-1 md:flex lg:ml-12">
             {navLinks.map((link) => (
               <a
                 key={link.name}
@@ -65,12 +73,27 @@ export default function Navbar() {
                 {link.name}
               </a>
             ))}
-            <a
-              href="#contact"
-              className="ml-3 rounded-lg bg-neon px-5 py-2 text-base font-semibold text-abyss transition-all hover:bg-frost hover:shadow-[0_0_24px_rgba(127,233,255,0.6)]"
-            >
-              Press start
-            </a>
+          </div>
+
+          {/* Desktop right — FOLLOW US + socials (pushed to far right) */}
+          <div className="ml-auto hidden items-center gap-4 md:flex">
+            <span className="font-mono text-[0.6rem] uppercase tracking-[0.28em] text-ink/60">
+              Follow
+            </span>
+            <div className="flex items-center gap-1.5">
+              {socials.map(({ Icon, href, label }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="rounded-lg p-2 text-ink transition-colors hover:bg-neon/10 hover:text-neon"
+                >
+                  <Icon size={18} />
+                </a>
+              ))}
+            </div>
           </div>
 
           {/* Mobile toggle */}
@@ -107,6 +130,23 @@ export default function Navbar() {
             {link.name}
           </a>
         ))}
+        <div className="mt-2 flex items-center gap-2 border-t border-neon/15 px-4 pt-4">
+          <span className="font-mono text-[0.6rem] uppercase tracking-[0.28em] text-ink/60">
+            Follow
+          </span>
+          {socials.map(({ Icon, href, label }) => (
+            <a
+              key={label}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={label}
+              className="rounded-lg p-2 text-ink transition-colors hover:text-neon"
+            >
+              <Icon size={18} />
+            </a>
+          ))}
+        </div>
       </motion.div>
     </nav>
   );

@@ -3,22 +3,21 @@ import ProjectsGrid from "./ProjectsGrid";
 import SectionHeader from "./SectionHeader";
 import Marquee from "./Marquee";
 
-// Server Component: fetches projects and hands them to the full-bleed showcase.
-// Marquee ribbons band the section top and bottom.
+// Server Component: fetches projects and hands them to the character-select
+// showcase. Marquee ribbons band the section top.
 export default async function Projects() {
   const projects = await getProjects();
 
   return (
-    <section id="projects" className="py-24">
+    <section id="projects" className="band-ink pb-24 pt-16">
       <Marquee text="mission complete" />
 
-      {/* heading stays in the padded shell; the browser below is full-bleed */}
-      <div className="shell pt-16 pb-10">
+      <div className="shell pb-8 pt-8">
         <SectionHeader
           ghost="MISSIONS"
           eyebrow="mission log · cleared"
           title="Missions cleared"
-          intro="Every run I've completed — select one from the log to review it."
+          intro="Every run I've completed — select one from the roster to review it."
         />
       </div>
 

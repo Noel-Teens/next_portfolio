@@ -33,8 +33,8 @@ export const site = {
     instagram: "https://www.instagram.com/noel_teens/",
   },
   // Brand colors (match the console theme) for manifest + theme-color.
-  themeColor: "#0a2c38",
-  accentColor: "#7fe9ff",
+  themeColor: "#0d0d0d",
+  accentColor: "#ffffff",
 } as const;
 
 export const sameAs = Object.values(site.socials);

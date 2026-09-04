@@ -173,6 +173,30 @@ export async function deleteSkill(formData: FormData) {
 }
 
 // ---------------------------------------------------------------------------
+// Profile (single-row player HUD)
+// ---------------------------------------------------------------------------
+
+export async function updateProfile(formData: FormData) {
+  const supabase = await requireUser();
+
+  const { error } = await supabase
+    .from("profile")
+    .update({
+      open_to_work: formData.get("open_to_work") === "on",
+      status_label: String(formData.get("status_label") ?? "").trim(),
+      region: String(formData.get("region") ?? "").trim(),
+      now_playing: String(formData.get("now_playing") ?? "").trim(),
+      reply_time: String(formData.get("reply_time") ?? "").trim(),
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", 1);
+
+  if (error) throw new Error(error.message);
+  revalidatePath("/");
+  revalidatePath("/admin");
+}
+
+// ---------------------------------------------------------------------------
 // Messages
 // ---------------------------------------------------------------------------
 

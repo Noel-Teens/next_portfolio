@@ -1,26 +1,35 @@
 "use client";
 
 import { useState } from "react";
-import type { Project, SkillCategory, Message } from "@/lib/supabase/types";
+import type {
+  Project,
+  SkillCategory,
+  Message,
+  Profile,
+} from "@/lib/supabase/types";
 import ProjectsManager from "./ProjectsManager";
 import SkillsManager from "./SkillsManager";
 import MessagesInbox from "./MessagesInbox";
+import ProfileManager from "./ProfileManager";
 
-type Tab = "projects" | "skills" | "messages";
+type Tab = "profile" | "projects" | "skills" | "messages";
 
 export default function AdminTabs({
+  profile,
   projects,
   skills,
   messages,
 }: {
+  profile: Profile;
   projects: Project[];
   skills: SkillCategory[];
   messages: Message[];
 }) {
-  const [tab, setTab] = useState<Tab>("projects");
+  const [tab, setTab] = useState<Tab>("profile");
   const unread = messages.filter((m) => !m.is_read).length;
 
   const tabs: { key: Tab; label: string; badge?: number }[] = [
+    { key: "profile", label: "Profile" },
     { key: "projects", label: `Projects (${projects.length})` },
     { key: "skills", label: `Skills (${skills.length})` },
     { key: "messages", label: "Messages", badge: unread },
@@ -49,6 +58,7 @@ export default function AdminTabs({
         ))}
       </div>
 
+      {tab === "profile" && <ProfileManager profile={profile} />}
       {tab === "projects" && <ProjectsManager projects={projects} />}
       {tab === "skills" && <SkillsManager skills={skills} />}
       {tab === "messages" && <MessagesInbox messages={messages} />}

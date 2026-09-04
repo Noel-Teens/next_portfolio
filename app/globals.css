@@ -1,18 +1,21 @@
 @import "tailwindcss";
 
 /* ---------------------------------------------------------------------------
-   Player-console identity — a single, permanent dark sci-fi HUD theme.
-   No dark/light switch: the page IS a game interface, top to bottom.
-   Palette (teal/cyan HUD family — kept from the prior identity, but the text
-   FLOOR was raised: the old muted #9FD3E3 body ink blended into the teal, so
-   body copy now uses a brighter near-white "ink" and cards are SOLID, not 5%
-   glass. Readability is the first requirement.):
-     Console Teal    #0C3846  primary surfaces
-     Steel Blue      #2A7387  secondary background
-     Neon Cyan       #7FE9FF  primary accent / glow
-     Ripple Cyan     #5EB0C8  secondary accent
-     Ink             #D3E7EF  DEFAULT body text (bright, high-contrast)
-     Frost White     #E4F4F8  headings / brightest text
+   Editorial mono identity — a permanent CREAM / near-black light theme
+   (Mafia key-art reference). Two values: warm cream paper + near-black ink,
+   hierarchy from WEIGHT, SOLID FILLS and HAIRLINE BORDERS — not glows (glows
+   die on light backgrounds). The token NAMES are kept (abyss/frost/neon/…) so
+   every existing utility keeps working; only their VALUES were inverted from
+   the previous dark ramp to a light one:
+     Light ramp (light → dark):
+       abyss   #f2efe9  base background (warm cream)  ← was near-black
+       deep    #e8e4dc  raised surface
+       arctic  #c9c3b8  mid / muted panel
+       ripple  #6b6b6b  secondary text / mid
+       glaze   #8c8c8c  muted / borders
+       ink     #141414  DEFAULT body text (near-black)
+       frost   #000000  headings / strongest text
+       neon    #111111  primary "accent" = near-black (the bold value on cream)
 --------------------------------------------------------------------------- */
 
 @theme {
@@ -20,26 +23,71 @@
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-fira-code), "JetBrains Mono", monospace;
 
-  --color-abyss: #0a2c38; /* base background */
-  --color-deep: #0c3846; /* Console Teal */
-  --color-arctic: #2a7387; /* Steel Blue */
-  --color-ripple: #5eb0c8; /* Ripple Cyan — secondary accent */
-  --color-neon: #7fe9ff; /* Neon Cyan — primary accent / glow */
-  --color-glaze: #9fd3e3; /* legacy muted — reserved for borders/decoration */
-  --color-ink: #d3e7ef; /* DEFAULT body text — bright, readable on teal */
-  --color-frost: #e4f4f8; /* Frost White — headings */
+  --color-abyss: #f2efe9; /* base background — warm cream */
+  --color-deep: #e8e4dc; /* raised surface */
+  --color-arctic: #c9c3b8; /* mid / muted panel */
+  --color-ripple: #6b6b6b; /* secondary text — mid grey */
+  --color-neon: #111111; /* primary "accent" — near-black bold value */
+  --color-glaze: #8c8c8c; /* muted — borders/decoration */
+  --color-ink: #141414; /* DEFAULT body text — near-black */
+  --color-frost: #000000; /* strongest text — headings */
 
-  --color-primary: #5eb0c8; /* accent alias used across components */
-  --color-background: #0a2c38;
-  --color-foreground: #e4f4f8;
+  --color-primary: #111111; /* accent alias used across components */
+  --color-background: #f2efe9;
+  --color-foreground: #141414;
 }
 
 :root {
-  color-scheme: dark;
-  /* Card surface is now a SOLID panel, not translucent glass over the busy
-     background — the old rgba(...,0.05) fill was the reason cards vanished. */
-  --surface: #0e3040;
-  --surface-line: rgba(127, 233, 255, 0.28);
+  color-scheme: light;
+  /* Solid card surface — a white/off-white panel with a dark hairline edge. */
+  --surface: #ffffff;
+  --surface-line: rgba(0, 0, 0, 0.14);
+}
+
+/* --- Alternating section bands -------------------------------------------- */
+/* The page alternates CREAM and BLACK bands (editorial rhythm). A cream band is
+   just the page background showing through. A black band is `.band-ink`, which
+   paints a near-black fill AND locally REDEFINES the colour tokens so every
+   token-based utility inside it (text-frost, text-ink, .glass, .chip, .eyebrow,
+   .rule-fade, etc.) flips to its light-on-dark variant with no per-component
+   edits. `.band-ink` sits ABOVE the body cream via its own background. */
+.band-ink {
+  background: #111111;
+  /* invert the ramp inside this band */
+  --color-abyss: #111111; /* band base */
+  --color-deep: #1a1a1a; /* raised surface within band */
+  --color-arctic: #333333;
+  --color-ripple: #a8a8a8; /* secondary text */
+  --color-neon: #ffffff; /* bold accent = white on black */
+  --color-glaze: #8c8c8c;
+  --color-ink: #dcdcdc; /* body text */
+  --color-frost: #ffffff; /* headings */
+  --color-primary: #ffffff;
+  --surface: #1c1c1c; /* dark card */
+  --surface-line: rgba(255, 255, 255, 0.16);
+  color: var(--color-ink);
+}
+/* Cards inside a black band become dark panels (the .glass fill is hard-coded
+   white for the cream theme, so override it here). */
+.band-ink .glass {
+  background: #1c1c1c;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 12px 32px rgba(0, 0, 0, 0.5);
+}
+/* Chips flip to light outlines on dark. */
+.band-ink .chip {
+  color: #f0f0f0;
+  border-color: rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.08);
+}
+/* The ghost outline word uses a DARK stroke for cream; on black it must be a
+   LIGHT stroke to be visible. */
+.band-ink .text-outline {
+  -webkit-text-stroke-color: rgba(255, 255, 255, 0.32);
+}
+/* The .text-gradient (dark ramp) would vanish on black — make it light. */
+.band-ink .text-gradient {
+  background-image: linear-gradient(120deg, #ffffff, #d8d8d8 55%, #9a9a9a);
 }
 
 html {
@@ -61,12 +109,12 @@ body {
   -webkit-font-smoothing: antialiased;
   /* No grid. A slow vertical depth gradient: surface light up top,
      abyssal dark toward the fold — reinforced per-section below. */
+  /* A gentle warm-cream vertical wash. */
   background-image: linear-gradient(
     180deg,
-    #12475a 0%,
-    #0c3846 22%,
-    #0a2c38 55%,
-    #071f28 100%
+    #f6f3ed 0%,
+    #f2efe9 40%,
+    #ece8e0 100%
   );
   background-attachment: fixed;
 }
@@ -79,19 +127,14 @@ body {
      panel is now opaque with a visible cyan edge and a subtle top sheen so it
      reads as a physical HUD element. This is the core "cards barely visible" fix. */
   .glass {
-    background: linear-gradient(
-      160deg,
-      #123d4e 0%,
-      #0d3242 55%,
-      #0b2b38 100%
-    );
+    background: #ffffff;
     border: 1px solid var(--surface-line);
-    box-shadow: inset 0 1px 0 rgba(127, 233, 255, 0.14),
-      0 10px 40px rgba(4, 20, 28, 0.55);
+    box-shadow: 0 1px 0 rgba(0,0,0, 0.02),
+      0 12px 32px rgba(20,18,14, 0.08);
   }
 
   .text-gradient {
-    background-image: linear-gradient(120deg, #e4f4f8, #7fe9ff 55%, #5eb0c8);
+    background-image: linear-gradient(120deg, #000000, #2a2a2a 55%, #555555);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -126,13 +169,11 @@ body {
     line-height: 1.14;
     letter-spacing: -0.015em;
     color: var(--color-frost);
-    text-shadow: 0 2px 22px rgba(4, 20, 28, 0.85),
-      0 0 34px rgba(94, 176, 200, 0.22);
   }
   .lede em {
     font-style: normal;
     font-weight: 700;
-    color: #aef0ff;
+    color: #000000;
   }
 
   /* A hairline gradient rule that fades like distance into water. */
@@ -150,19 +191,19 @@ body {
 
   /* Text stroke treatment — an outlined word behind a filled one (masthead). */
   .text-outline {
-    -webkit-text-stroke: 1.5px rgba(159, 211, 227, 0.5);
+    -webkit-text-stroke: 1.5px rgba(0,0,0, 0.35);
     color: transparent;
   }
 
-  /* Terminal-style data chip — an "equipped item" pill. Brighter text + a
-     visible fill so chips read as solid tags, not ghost outlines. */
+  /* Terminal-style data chip — an "equipped item" pill. Dark ink on a faint
+     ink fill with a hairline border, so chips read as solid tags on cream. */
   .chip {
     font-family: var(--font-mono);
     font-size: 0.68rem;
     letter-spacing: 0.02em;
-    color: var(--color-frost);
-    border: 1px solid rgba(127, 233, 255, 0.32);
-    background: rgba(127, 233, 255, 0.1);
+    color: var(--color-ink);
+    border: 1px solid rgba(0,0,0, 0.18);
+    background: rgba(0,0,0, 0.04);
   }
 
   /* GLOW HORIZON — the bright cyan light-bloom along a line (reference hero).
@@ -176,41 +217,37 @@ body {
     position: absolute;
     left: 50%;
     bottom: 0;
-    height: 2px;
+    height: 1px;
     width: min(70rem, 90%);
     transform: translateX(-50%);
     background: linear-gradient(
       90deg,
       transparent,
-      #7fe9ff 30%,
-      #e4f4f8 50%,
-      #7fe9ff 70%,
+      rgba(0,0,0,0.35) 30%,
+      rgba(0,0,0,0.5) 50%,
+      rgba(0,0,0,0.35) 70%,
       transparent
     );
-    box-shadow: 0 0 40px 12px rgba(127, 233, 255, 0.55),
-      0 0 120px 40px rgba(94, 176, 200, 0.35);
   }
 
-  /* RIM-LIT card — the glowing edge-light around the focused character card.
-     Applied to the selected coverflow panel. */
+  /* RIM-LIT card — a clean dark ring + soft drop shadow (glow replaced with
+     solid emphasis for the light theme). Applied to the selected panel. */
   .rim-light {
-    box-shadow: 0 0 0 1px rgba(127, 233, 255, 0.7),
-      0 0 30px rgba(127, 233, 255, 0.5), 0 0 80px rgba(94, 176, 200, 0.35),
-      0 30px 60px rgba(4, 20, 28, 0.6);
+    box-shadow: 0 0 0 1.5px rgba(0,0,0, 0.85),
+      0 18px 44px rgba(20,18,14, 0.18);
   }
 
   /* Body copy that must stay legible over busy artwork: brighter than glaze,
      a touch heavier, with a soft dark halo so edges hold against the image. */
   .copy-legible {
-    color: var(--color-frost);
+    color: var(--color-ink);
     font-weight: 450;
-    text-shadow: 0 1px 16px rgba(4, 20, 28, 0.9), 0 0 2px rgba(4, 20, 28, 0.8);
   }
 
   /* Small bright cyan text glow for numbers/labels that should pop. */
   .lit {
-    color: #aef0ff;
-    text-shadow: 0 0 18px rgba(127, 233, 255, 0.6);
+    color: #000000;
+    font-weight: 700;
   }
 
   /* SHELL — full-bleed content frame. The site runs edge to edge; this only
@@ -227,16 +264,17 @@ body {
   .marquee {
     overflow: hidden;
     white-space: nowrap;
-    border-block: 1px solid rgba(159, 211, 227, 0.15);
+    border-block: 1px solid rgba(0,0,0, 0.12);
     background: linear-gradient(
       90deg,
-      rgba(94, 176, 200, 0.08),
-      rgba(10, 44, 56, 0)
+      rgba(0,0,0, 0.05),
+      rgba(0,0,0, 0)
     );
   }
   .marquee__track {
     display: inline-flex;
-    gap: 3rem;
+    /* No flex gap: spacing comes from each item's ✦ separator. A gap here would
+       add extra width between the two halves and break the exact -50% wrap. */
     padding-block: 0.75rem;
     animation: marquee-scroll 28s linear infinite;
   }
@@ -367,18 +405,28 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(94, 176, 200, 0.35);
+  background: rgba(0,0,0, 0.28);
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(94, 176, 200, 0.6);
+  background: rgba(0,0,0, 0.45);
+}
+
+/* Hide the scrollbar on opt-in elements (e.g. the roster) while keeping the
+   element scrollable — used with scroll-into-view for a scrollbar-less scroll. */
+.no-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
 }
 
 /* --- Selection + focus ---------------------------------------------------- */
 
 ::selection {
-  background: rgba(94, 176, 200, 0.35);
-  color: var(--color-frost);
+  background: #111111;
+  color: #f2efe9;
 }
 
 :focus-visible {

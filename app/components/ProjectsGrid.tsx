@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import { ExternalLink, Github, Play, ArrowUpRight } from "lucide-react";
+import { Github, Play, ArrowUpRight } from "lucide-react";
 import type { Project } from "@/lib/supabase/types";
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -12,258 +12,219 @@ function hasLiveUrl(url: string | null): url is string {
   return !!url && url !== "#";
 }
 
-// PROJECTS as a full-bleed MASTER–DETAIL browser (reference layout):
-//   • LEFT ~25%: every project stacked vertically as a selectable list.
-//   • RIGHT ~75%: the selected project's big landscape image + full detail.
-// The whole thing runs edge to edge (no side gutters). Selection is click /
-// keyboard driven; featured projects lead the list.
+// MISSIONS as a character-select screen. Three columns, NO text overlaid on the
+// screenshots (that fought the busy images):
+//   • roster  — compact 1:1 icon tiles; selected one highlighted
+//   • preview — the selected project's screenshot in its own clean framed panel
+//   • details — mission number, title, highlight, stack, description, actions
+// Everything uses theme tokens so it renders correctly on the `.band-ink` band.
 export default function ProjectsGrid({ projects }: { projects: Project[] }) {
   const items = [...projects].sort(
     (a, b) => Number(b.featured) - Number(a.featured)
   );
   const [sel, setSel] = useState(0);
+  const tileRefs = useRef<(HTMLLIElement | null)[]>([]);
+
+  // Smoothly scroll the selected tile into view within the (scrollbar-less)
+  // roster — the "scroll animation without a scrollbar".
+  useEffect(() => {
+    tileRefs.current[sel]?.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+      inline: "nearest",
+    });
+  }, [sel]);
+
   const active = items[sel] ?? items[0];
   if (!active) return null;
 
   const total = String(items.length).padStart(2, "0");
 
   return (
-    <div className="grid grid-cols-1 border-y border-glaze/15 lg:grid-cols-[26%_1fr]">
-      {/* ── LEFT: project log ─────────────────────────────────────────── */}
-      <ul
-        className="flex flex-col divide-y divide-glaze/10 border-glaze/15 lg:border-r"
-        role="listbox"
-        aria-label="Projects"
-      >
-        {items.map((p, i) => {
-          const on = i === sel;
-          return (
-            <li key={p.id}>
-              <button
-                role="option"
-                aria-selected={on}
-                onClick={() => setSel(i)}
-                className={`group relative flex w-full items-center gap-4 px-5 py-5 text-left transition-colors duration-300 md:px-8 ${
-                  on ? "bg-[#7fe9ff]/10" : "hover:bg-frost/5"
-                }`}
+    <div className="shell grid grid-cols-1 items-start gap-8 lg:grid-cols-[12rem_1.25fr_1fr] lg:gap-10">
+      {/* ── ROSTER: landscape thumbnails. The label is on mobile only; on lg
+          the list top-aligns with the selected image (same Y) and shares its
+          exact height, so the roster spans exactly the image's vertical span. ── */}
+      <div>
+        <div className="mb-3 font-mono text-[0.54rem] uppercase tracking-[0.24em] text-neon lg:hidden">
+          roster
+        </div>
+        <ul
+          role="listbox"
+          aria-label="Missions"
+          className="no-scrollbar flex snap-x gap-3 overflow-x-auto scroll-smooth pb-2 lg:h-[30rem] lg:snap-y lg:flex-col lg:gap-2.5 lg:overflow-y-auto lg:pb-0 lg:[mask-image:linear-gradient(to_bottom,#000_calc(100%-2rem),transparent)]"
+        >
+          {items.map((p, i) => {
+            const on = i === sel;
+            return (
+              <li
+                key={p.id}
+                ref={(el) => {
+                  tileRefs.current[i] = el;
+                }}
+                className="flex-none snap-center lg:w-full"
               >
-                {/* active accent bar */}
-                <span
-                  className={`absolute inset-y-0 left-0 w-0.5 transition-all duration-300 ${
-                    on ? "bg-[#7fe9ff] shadow-[0_0_12px_#7fe9ff]" : "bg-transparent"
-                  }`}
-                />
-                {/* selection dot — follows the selected project down the list */}
-                <span className="relative flex h-4 w-4 flex-none items-center justify-center">
-                  {on && (
-                    <motion.span
-                      layoutId="project-dot"
-                      transition={{ type: "spring", stiffness: 500, damping: 34 }}
-                      className="absolute inset-0 rounded-full bg-[#7fe9ff] shadow-[0_0_12px_#7fe9ff]"
-                    />
-                  )}
-                  <span
-                    className={`relative h-1.5 w-1.5 rounded-full transition-colors ${
-                      on ? "bg-abyss" : "bg-glaze/30"
-                    }`}
-                  />
-                </span>
-
-                <span
-                  className={`font-mono text-xs tabular-nums transition-colors ${
-                    on ? "lit" : "text-ink/60"
+                <button
+                  role="option"
+                  aria-selected={on}
+                  onClick={() => setSel(i)}
+                  title={p.title}
+                  className={`group relative block aspect-[16/10] w-28 overflow-hidden rounded-md border transition-all duration-300 lg:w-full ${
+                    on
+                      ? "border-neon ring-2 ring-neon/50"
+                      : "border-neon/15 opacity-55 hover:opacity-100"
                   }`}
                 >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-
-                {/* thumbnail */}
-                <span className="relative h-12 w-16 flex-none overflow-hidden rounded-md border border-glaze/15">
                   {p.image_url ? (
                     <Image
                       src={p.image_url}
-                      alt=""
+                      alt={p.title}
                       fill
-                      sizes="64px"
+                      sizes="96px"
                       className={`object-cover object-top transition-all duration-300 ${
                         on ? "" : "grayscale group-hover:grayscale-0"
                       }`}
                     />
                   ) : (
-                    <span className="block h-full w-full bg-arctic/40" />
+                    <span className="flex h-full w-full items-center justify-center bg-arctic/40 font-display text-lg text-frost">
+                      {p.title.charAt(0)}
+                    </span>
                   )}
-                </span>
-
-                <span className="min-w-0 flex-1">
                   <span
-                    className={`block truncate font-display text-base font-semibold transition-colors ${
-                      on ? "text-frost" : "text-ink group-hover:text-frost"
+                    className={`absolute left-1 top-1 rounded px-1 font-mono text-[0.5rem] tabular-nums ${
+                      on ? "bg-neon text-abyss" : "bg-black/60 text-white"
                     }`}
                   >
-                    {p.title}
+                    {String(i + 1).padStart(2, "0")}
                   </span>
-                  <span className="block truncate font-mono text-[0.65rem] text-ink/70">
-                    {p.tags.slice(0, 3).join(" · ") || "—"}
-                  </span>
-                </span>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
 
-                {p.featured && (
-                  <span className="hidden flex-none rounded border border-[#7fe9ff]/40 px-1.5 py-0.5 font-mono text-[0.5rem] uppercase tracking-widest text-[#7fe9ff]/80 sm:block">
-                    ★
-                  </span>
-                )}
-              </button>
-            </li>
-          );
-        })}
-      </ul>
-
-      {/* ── RIGHT: selected project detail ────────────────────────────── */}
-      {/* Two layouts. MOBILE: a clean vertical stack — image on top, then all
-          details on a solid surface below (no text over the screenshot). LG+:
-          the editorial overlay, image filling the card with content laid over a
-          bottom scrim across the full width. */}
-      <div className="relative overflow-hidden lg:min-h-[48rem]">
+      {/* ── PREVIEW: clean framed screenshot (no text on it) ────────────── */}
+      <div className="relative">
         <AnimatePresence mode="wait">
           <motion.div
             key={active.id}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.45, ease }}
-            className="flex flex-col lg:absolute lg:inset-0 lg:block"
+            transition={{ duration: 0.4, ease }}
+            className="relative aspect-[16/10] w-full overflow-hidden rounded-xl border border-neon/20 lg:aspect-auto lg:h-[30rem]"
           >
-            {/* ── image ── mobile: fixed-ratio banner in flow; lg: fills card ── */}
-            <div className="relative aspect-[16/10] w-full sm:aspect-[16/9] lg:absolute lg:inset-0 lg:aspect-auto lg:h-full">
-              {active.image_url ? (
-                <Image
-                  src={active.image_url}
-                  alt={active.title}
-                  fill
-                  sizes="(max-width:1024px) 100vw, 75vw"
-                  preload
-                  className="object-cover object-top"
-                />
-              ) : (
-                <div className="absolute inset-0 bg-arctic/40" />
-              )}
-
-              {/* find index — over the image, top-left */}
-              <div className="absolute left-5 top-5 flex items-center gap-3 md:left-12 md:top-6">
-                <span className="rounded bg-abyss/80 px-2.5 py-1 font-mono text-[0.6rem] uppercase tracking-widest text-frost backdrop-blur">
-                  mission {String(sel + 1).padStart(2, "0")} / {total}
-                </span>
-                {active.featured && (
-                  <span className="rounded-full border border-[#7fe9ff]/50 bg-[#7fe9ff]/15 px-2.5 py-1 font-mono text-[0.55rem] uppercase tracking-widest text-[#7fe9ff]">
-                    boss fight
-                  </span>
-                )}
-              </div>
-
-              {/* lg-only: scrim + giant vertical outlined title over the image */}
-              <div className="absolute inset-0 hidden bg-gradient-to-t from-abyss via-abyss/85 via-40% to-transparent lg:block" />
-              <span
-                aria-hidden
-                className="display pointer-events-none absolute right-4 top-8 hidden select-none text-[clamp(2.5rem,10vh,6.5rem)] leading-[0.82] [writing-mode:vertical-rl] md:right-10 lg:block"
-                style={{
-                  color: "transparent",
-                  WebkitTextStroke: "2px rgba(228,244,248,0.95)",
-                  filter:
-                    "drop-shadow(0 0 14px rgba(10,44,56,0.95)) drop-shadow(0 0 4px rgba(10,44,56,0.9))",
-                }}
-              >
-                {active.title.split(" ")[0]?.toUpperCase()}
-              </span>
-            </div>
-
-            {/* ── details ── mobile: solid surface below the image; lg: overlay ── */}
-            <div className="relative bg-abyss p-6 md:p-8 lg:absolute lg:inset-x-0 lg:bottom-0 lg:bg-transparent lg:p-12 lg:pr-28">
-              {/* lg-only blurred plate behind the overlaid content */}
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-0 hidden backdrop-blur-[2px] lg:block"
-                style={{
-                  background:
-                    "linear-gradient(to top, rgba(7,31,40,0.92), rgba(7,31,40,0.55) 55%, transparent)",
-                  maskImage: "linear-gradient(to top, #000 60%, transparent)",
-                  WebkitMaskImage: "linear-gradient(to top, #000 60%, transparent)",
-                }}
+            {active.image_url ? (
+              <Image
+                src={active.image_url}
+                alt={active.title}
+                fill
+                sizes="(max-width:1024px) 100vw, 45vw"
+                preload
+                className="object-cover object-top"
               />
-              <div className="relative flex flex-col gap-8 lg:flex-row lg:items-end lg:gap-16">
-                {/* main: title + description */}
-                <div className="lg:flex-[1.7]">
-                  <h3 className="display text-3xl text-frost sm:text-4xl md:text-6xl">
-                    {active.title}
-                  </h3>
-
-                  {active.highlight && (
-                    <p className="mt-4 flex items-start gap-2.5 text-base font-medium text-frost">
-                      <span className="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-[#7fe9ff] shadow-[0_0_8px_#7fe9ff]" />
-                      {active.highlight}
-                    </p>
-                  )}
-
-                  <div className="mt-5 max-w-[62ch] space-y-4 text-[0.975rem] leading-relaxed text-frost/85">
-                    {active.description
-                      .split(/\n\s*\n/)
-                      .map((para) => para.trim())
-                      .filter(Boolean)
-                      .map((para, i) => (
-                        <p key={i}>{para}</p>
-                      ))}
-                  </div>
-                </div>
-
-                {/* side: stack + links */}
-                <div className="lg:flex-1 lg:border-l lg:border-glaze/15 lg:pl-16">
-                  {active.tags.length > 0 && (
-                    <div className="mb-7">
-                      <div className="eyebrow mb-3 text-[0.58rem]">stack</div>
-                      <ul className="flex flex-wrap gap-2">
-                        {active.tags.map((t, i) => (
-                          <li key={i} className="chip rounded-md px-3 py-1.5">
-                            {t}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  <div className="eyebrow mb-3 text-[0.58rem]">links</div>
-                  <div className="flex flex-wrap items-center gap-3">
-                    {hasLiveUrl(active.live_url) && (
-                      <a
-                        href={active.live_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 rounded-lg bg-[#7fe9ff] px-5 py-2.5 text-sm font-semibold text-abyss shadow-[0_0_28px_rgba(127,233,255,0.5)] transition-all hover:bg-frost"
-                      >
-                        <Play size={14} className="translate-x-px fill-abyss" />
-                        Play live
-                      </a>
-                    )}
-                    {active.github_url && (
-                      <a
-                        href={active.github_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 rounded-lg border border-glaze/30 px-5 py-2.5 text-sm font-semibold text-frost transition-all hover:border-[#7fe9ff] hover:text-[#7fe9ff]"
-                      >
-                        <Github size={15} /> Source
-                      </a>
-                    )}
-                    {!hasLiveUrl(active.live_url) && !active.github_url && (
-                      <span className="flex items-center gap-2 font-mono text-xs text-ink/70">
-                        Logged — no public link yet <ArrowUpRight size={14} />
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
+            ) : (
+              <div className="absolute inset-0 bg-arctic/40" />
+            )}
+            {/* mission tag — small chip, top-left, doesn't cover content */}
+            <span className="absolute left-3 top-3 rounded bg-black/65 px-2.5 py-1 font-mono text-[0.55rem] uppercase tracking-widest text-white backdrop-blur">
+              mission {String(sel + 1).padStart(2, "0")} / {total}
+            </span>
           </motion.div>
         </AnimatePresence>
       </div>
+
+      {/* ── DETAILS: all text lives here, never on the image ────────────── */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={`d-${active.id}`}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ duration: 0.4, ease, delay: 0.05 }}
+        >
+          {/* big mission number + title */}
+          <div className="flex items-start gap-4">
+            <span className="font-display text-5xl font-bold leading-[0.8] text-frost sm:text-6xl">
+              {String(sel + 1).padStart(2, "0")}
+            </span>
+            <div className="pt-1">
+              <span className="font-mono text-[0.55rem] uppercase tracking-[0.3em] text-neon/70">
+                mission
+              </span>
+              <h3 className="display text-3xl leading-none text-frost sm:text-4xl">
+                {active.title}
+              </h3>
+            </div>
+          </div>
+
+          {active.highlight && (
+            <p className="mt-5 flex items-start gap-2 text-base font-medium text-frost">
+              <span className="mt-2 h-1.5 w-1.5 flex-none bg-neon" />
+              {active.highlight}
+            </p>
+          )}
+
+          {/* description */}
+          <div className="mt-4 space-y-3 text-sm leading-relaxed text-ink/85">
+            {active.description
+              .split(/\n\s*\n/)
+              .map((para) => para.trim())
+              .filter(Boolean)
+              .slice(0, 2)
+              .map((para, i) => (
+                <p key={i}>{para}</p>
+              ))}
+          </div>
+
+          {/* stack */}
+          {active.tags.length > 0 && (
+            <div className="mt-6">
+              <div className="mb-2 font-mono text-[0.54rem] uppercase tracking-[0.24em] text-neon/70">
+                stack
+              </div>
+              <ul className="flex flex-wrap gap-2">
+                {active.tags.map((t, i) => (
+                  <li key={i} className="chip rounded-md px-2.5 py-1">
+                    {t}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* actions */}
+          <div className="mt-7 flex flex-wrap gap-3">
+            {hasLiveUrl(active.live_url) && (
+              <a
+                href={active.live_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 rounded-sm bg-neon px-6 py-3 text-sm font-bold uppercase tracking-widest text-abyss transition-colors hover:bg-frost"
+              >
+                <Play size={14} className="translate-x-px fill-abyss" />
+                Play live
+              </a>
+            )}
+            {active.github_url && (
+              <a
+                href={active.github_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 rounded-sm border border-neon/40 px-6 py-3 text-sm font-semibold uppercase tracking-widest text-frost transition-colors hover:border-neon hover:bg-neon/10"
+              >
+                <Github size={15} /> Source
+              </a>
+            )}
+            {!hasLiveUrl(active.live_url) && !active.github_url && (
+              <span className="flex items-center gap-2 font-mono text-xs text-ink/60">
+                Logged — no public link yet <ArrowUpRight size={14} />
+              </span>
+            )}
+          </div>
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }

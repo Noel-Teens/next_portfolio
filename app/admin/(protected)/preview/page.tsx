@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import PortfolioHome from "@/app/components/PortfolioHome";
+import { getProfile } from "@/lib/data";
 
 export const metadata = {
   title: "Preview — Portfolio",
@@ -10,7 +11,8 @@ export const metadata = {
 // Admin-only live preview of the public site. The proxy blocks the real public
 // routes while logged in, so this is how the admin reviews their edits without
 // signing out. It renders the exact same page component as `/`.
-export default function PreviewPage() {
+export default async function PreviewPage() {
+  const profile = await getProfile();
   return (
     <div className="-mx-6 -my-10">
       <div className="sticky top-0 z-[60] flex items-center justify-between gap-4 bg-slate-900/90 text-white px-6 py-2.5 backdrop-blur">
@@ -24,7 +26,7 @@ export default function PreviewPage() {
           <ArrowLeft size={16} /> Back to dashboard
         </Link>
       </div>
-      <PortfolioHome />
+      <PortfolioHome profile={profile} />
     </div>
   );
 }
